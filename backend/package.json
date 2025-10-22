@@ -1,0 +1,50 @@
+{
+  "name": "loopfi-backend",
+  "version": "1.0.0",
+  "description": "LoopFi Smart Savings Platform - Backend API",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Your Name <your.email@university.edu>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/loopfund.git",
+    "private": true
+  },
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "fix-indexes": "node src/scripts/fixGroupIndexes.js"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "cron": "^4.3.3",
+    "dotenv": "^17.2.1",
+    "ethers": "^5.8.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "express-session": "^1.18.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "nanoid": "^3.3.6",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^7.0.5",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

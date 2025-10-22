@@ -1,0 +1,17 @@
+[network]
+name = "testnet"
+stacks_node_rpc_address = "https://api.testnet.hiro.so"
+deployment_fee_rate = 10
+
+[accounts.deployer]
+mnemonic = "<YOUR PRIVATE KEY HERE>"
+balance = 100_000_000_000_000
+
+[accounts.wallet_1]
+mnemonic = "<GENERATED WALLET 1>"
+balance = 100_000_000_000_000
+
+[accounts.wallet_2]
+mnemonic = "<GENERATED WALLET 2>"
+balance = 100_000_000_000_000
+

@@ -1,0 +1,43 @@
+# Environment variables (NEVER commit these!)
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# Private keys and secrets
+*.key
+*.pem
+contracts/*-key.js
+contracts/get-private-key.js
+
+# Deployment info
+contracts/deployment-*.json
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Database
+*.db
+*.sqlite

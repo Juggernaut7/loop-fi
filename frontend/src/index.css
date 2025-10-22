@@ -1,0 +1,257 @@
+/* LoopFi Revolutionary Design System */
+@import './styles/loopfund-design-system.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 168 100% 38%; /* LoopFi Emerald */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 0 100% 50%; /* LoopFi Coral */
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 168 100% 38%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 168 100% 45%; /* LoopFi Emerald - brighter for dark mode */
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 0 100% 55%; /* LoopFi Coral - brighter for dark mode */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 168 100% 45%;
+  }
+
+  * {
+    @apply border-loopfund-neutral-300 dark:border-loopfund-neutral-600;
+  }
+  
+  body {
+    @apply bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg text-loopfund-neutral-900 dark:text-loopfund-dark-text;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-loopfund-neutral-200 dark:bg-loopfund-neutral-700;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-loopfund-neutral-400 dark:bg-loopfund-neutral-500 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-loopfund-neutral-500 dark:bg-loopfund-neutral-400;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utilities */
+  .glass {
+    @apply backdrop-blur-md bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10;
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl shadow-lg dark:shadow-xl;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply bg-gradient-synergy hover:shadow-glow text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-loopfund-neutral-50 dark:bg-loopfund-dark-surface text-loopfund-neutral-900 dark:text-loopfund-dark-text border border-loopfund-neutral-300 dark:border-loopfund-neutral-600 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply text-loopfund-neutral-600 dark:text-loopfund-neutral-400 hover:text-loopfund-neutral-900 dark:hover:text-loopfund-dark-text font-medium transition-colors duration-200;
+  }
+
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-gradient-synergy bg-clip-text text-transparent animate-gradient-x;
+  }
+
+  .text-gradient-static {
+    @apply bg-gradient-synergy bg-clip-text text-transparent;
+  }
+
+  /* Card styles */
+  .feature-card {
+    @apply glass-card p-6 hover:shadow-glow transition-all duration-300 transform hover:-translate-y-2;
+  }
+
+  .stats-card {
+    @apply glass-card p-8 text-center;
+  }
+
+  /* Animation classes */
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+
+  .animate-on-scroll.animate {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-hero {
+    @apply bg-gradient-to-br from-loopfund-neutral-50 via-white to-loopfund-neutral-100 dark:from-loopfund-dark-bg dark:via-loopfund-dark-surface dark:to-loopfund-dark-bg;
+  }
+
+  .bg-gradient-features {
+    @apply bg-gradient-to-br from-loopfund-neutral-50 to-white dark:from-loopfund-dark-bg dark:to-loopfund-dark-surface;
+  }
+
+  /* Floating elements */
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .floating-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+
+  .floating-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* Responsive text sizes */
+  .text-responsive-xl {
+    @apply text-4xl md:text-5xl lg:text-6xl xl:text-7xl;
+  }
+
+  .text-responsive-lg {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .text-responsive-md {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+
+  /* Enhanced color utilities */
+  .bg-synergy-gradient {
+    @apply bg-gradient-to-r from-synergy-500 to-synergy-600;
+  }
+
+  .bg-velocity-gradient {
+    @apply bg-gradient-to-r from-velocity-500 to-velocity-600;
+  }
+
+  .bg-synergy-velocity {
+    @apply bg-gradient-to-r from-synergy-500 to-velocity-500;
+  }
+
+  .text-synergy-gradient {
+    @apply bg-gradient-to-r from-synergy-500 to-synergy-600 bg-clip-text text-transparent;
+  }
+
+  .text-velocity-gradient {
+    @apply bg-gradient-to-r from-velocity-500 to-velocity-600 bg-clip-text text-transparent;
+  }
+
+  .border-synergy-glow {
+    @apply border border-synergy-500/30 shadow-glow;
+  }
+
+  .border-velocity-glow {
+    @apply border border-velocity-500/30 shadow-glow-teal;
+  }
+
+  /* Focus states */
+  .focus-synergy {
+    @apply focus:ring-2 focus:ring-synergy-500/50 focus:border-synergy-500;
+  }
+
+  .focus-velocity {
+    @apply focus:ring-2 focus:ring-velocity-500/50 focus:border-velocity-500;
+  }
+
+  /* Hover effects */
+  .hover-synergy {
+    @apply hover:bg-synergy-50 hover:border-synergy-200 dark:hover:bg-synergy-950 dark:hover:border-synergy-800;
+  }
+
+  .hover-velocity {
+    @apply hover:bg-velocity-50 hover:border-velocity-200 dark:hover:bg-velocity-950 dark:hover:border-velocity-800;
+  }
+  
+  /* Custom scrollbar for sidebar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(71 85 105);
+    border-radius: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(100 116 139);
+  }
+}

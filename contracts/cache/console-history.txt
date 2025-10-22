@@ -1,0 +1,6 @@
+.exit
+.
+exit
+npm run deploy:alfajores
+node -e "require('hardhat').run('check-balance.js', {network: 'alfajores'})"
+npx hardhat run check-balance.js --network alfajores

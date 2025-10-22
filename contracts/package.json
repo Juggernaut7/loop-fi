@@ -1,0 +1,35 @@
+{
+  "name": "loopfi-contracts",
+  "version": "1.0.0",
+  "description": "LoopFi Smart Contracts - DeFi Social Saving Platform on Celo",
+  "main": "index.js",
+  "scripts": {
+    "setup": "node setup.js",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:alfajores": "hardhat run scripts/simple-deploy.js --network alfajores",
+    "deploy:sepolia": "hardhat run scripts/simple-deploy.js --network sepolia",
+    "deploy:celo": "hardhat run scripts/deploy.js --network celo",
+    "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
+    "verify:alfajores": "hardhat verify --network alfajores",
+    "verify:celo": "hardhat verify --network celo"
+  },
+  "keywords": [
+    "celo",
+    "defi",
+    "savings",
+    "smart-contracts",
+    "solidity"
+  ],
+  "author": "LoopFi Team",
+  "license": "MIT",
+  "devDependencies": {
+    "hardhat": "^2.26.3"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.3",
+    "ethers": "^5.8.0"
+  }
+}

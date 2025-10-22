@@ -9,7 +9,7 @@
 
 **A mobile-first DeFi savings platform on Celo blockchain that makes saving money simple, rewarding, and fun. Create goals, join pools, stake CELO, and earn up to 10% APY—all secured by smart contracts.**
 
-[🚀 Live Demo](https://loopfi.app) • [📖 Documentation](https://docs.loopfi.app) • [🐦 Twitter](https://twitter.com/loopfi) • [💬 Discord](https://discord.gg/loopfi)
+[🚀 Live Demo](https://loo-pfi.vercel.app) • [📡 Backend API](https://loop-fi.onrender.com) • [🔗 GitHub](https://github.com/Juggernaut7/loop-fi)
 
 </div>
 
@@ -374,10 +374,16 @@ https://faucet.celo.org/alfajores
 
 ### 5️⃣ Start Using!
 
-1. Open http://localhost:5173
+**Option A: Use Live Deployment**
+1. Visit [https://loo-pfi.vercel.app](https://loo-pfi.vercel.app)
 2. Connect your wallet
 3. Create your first savings goal
 4. Watch your money grow! 💰
+
+**Option B: Run Locally**
+1. Open http://localhost:5173
+2. Connect your wallet
+3. Start saving!
 
 ---
 
@@ -567,11 +573,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-[![Website](https://img.shields.io/badge/Website-loopfi.app-35D07F?style=for-the-badge)](https://loopfi.app)
-[![Twitter](https://img.shields.io/badge/Twitter-@loopfi-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/loopfi)
-[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/loopfi)
-[![Telegram](https://img.shields.io/badge/Telegram-Join-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/loopfi)
-[![Documentation](https://img.shields.io/badge/Docs-Read-orange?style=for-the-badge)](https://docs.loopfi.app)
+[![Website](https://img.shields.io/badge/Website-loo--pfi.vercel.app-35D07F?style=for-the-badge)](https://loo-pfi.vercel.app)
+[![Backend API](https://img.shields.io/badge/Backend-loop--fi.onrender.com-339933?style=for-the-badge)](https://loop-fi.onrender.com)
+[![GitHub](https://img.shields.io/badge/GitHub-loop--fi-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Juggernaut7/loop-fi)
+[![Celoscan](https://img.shields.io/badge/Celoscan-Contracts-35D07F?style=for-the-badge&logo=celo&logoColor=white)](https://alfajores.celoscan.io/)
 
 </div>
 
@@ -581,10 +586,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 Need help? We're here!
 
-- 📧 **Email:** support@loopfi.app
-- 💬 **Discord:** [discord.gg/loopfi](https://discord.gg/loopfi)
-- 🐦 **Twitter:** [@loopfi](https://twitter.com/loopfi)
-- 📖 **Docs:** [docs.loopfi.app](https://docs.loopfi.app)
+- 📧 **Email:** abdulkabir06000@gmail.com
+- 🌐 **Website:** [loo-pfi.vercel.app](https://loo-pfi.vercel.app)
+- 🔗 **GitHub:** [github.com/Juggernaut7/loop-fi](https://github.com/Juggernaut7/loop-fi)
+- 📊 **Contracts:** [alfajores.celoscan.io](https://alfajores.celoscan.io/)
 
 ---
 

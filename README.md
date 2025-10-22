@@ -500,25 +500,25 @@ npm run test:e2e
 
 ## 🎯 Roadmap
 
-### ✅ **Phase 1: Foundation (Q4 2024)**
+### ✅ **Phase 1: Foundation (Q4 2025) - COMPLETE**
 - [x] Smart contract development
 - [x] Frontend & backend development
 - [x] Testnet deployment
 - [x] Basic features (Goals, Pools, Staking)
 
-### 🚧 **Phase 2: Enhancement (Q1 2025)**
+### 🚧 **Phase 2: Enhancement (Q1 2026) - NEXT**
 - [ ] Mainnet deployment
 - [ ] Mobile app (React Native)
 - [ ] Advanced AI advisor
 - [ ] Multi-language support
 
-### 📅 **Phase 3: Expansion (Q2 2025)**
+### 📅 **Phase 3: Expansion (Q2 2026)**
 - [ ] More DeFi integrations
 - [ ] Yield farming strategies
 - [ ] DAO governance
 - [ ] Cross-chain support
 
-### 🔮 **Phase 4: Scale (Q3 2025)**
+### 🔮 **Phase 4: Scale (Q3 2026)**
 - [ ] Institutional features
 - [ ] White-label solution
 - [ ] API for partners
@@ -551,17 +551,15 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 <table>
 <tr>
 <td align="center">
-<img src="https://github.com/yourusername.png" width="100px;" alt=""/><br />
-<sub><b>Your Name</b></sub><br />
-<sub>Founder & Lead Dev</sub>
-</td>
-<td align="center">
-<img src="https://github.com/contributor.png" width="100px;" alt=""/><br />
-<sub><b>Contributor</b></sub><br />
-<sub>Smart Contract Dev</sub>
+<img src="https://github.com/Juggernaut7.png" width="100px;" alt=""/><br />
+<sub><b>Juggernaut7</b></sub><br />
+<sub>Founder & Lead Developer</sub><br />
+<a href="https://github.com/Juggernaut7">@Juggernaut7</a>
 </td>
 </tr>
 </table>
+
+**Built with passion for the future of DeFi on Celo** 💚
 
 ---
 

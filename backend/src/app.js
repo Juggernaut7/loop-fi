@@ -70,12 +70,6 @@ app.use('/api/dashboard', require('./routes/dashboard.route'));
 // AI routes
 app.use('/api/ai', require('./routes/ai.route'));
 
-// DeFi routes (Web3 integration)
-app.use('/api/defi', require('./routes/defi.route'));
-
-// Real DeFi routes (Production-ready with AI)
-app.use('/api/defi-real', require('./routes/defi-real.route'));
-
 // Swagger docs
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

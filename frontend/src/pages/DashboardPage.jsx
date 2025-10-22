@@ -52,7 +52,6 @@ import { formatCurrencySimple } from '../utils/currency';
 // Removed old Web2 wallet imports - using Web3 wallet now
 import WalletConnect from '../components/web3/WalletConnect';
 import walletService from '../services/walletService';
-import defiService from '../services/defiService';
 import { useWallet } from '../hooks/useWallet';
 
 const DashboardPage = () => {
@@ -88,106 +87,44 @@ const DashboardPage = () => {
     toast.info('Use your wallet to withdraw CELO/cUSD directly');
   };
 
-  // Fetch dashboard data ONLY after wallet is connected
+  // Initialize dashboard data with wallet info (no backend calls needed)
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      // Don't fetch any data if wallet is not connected
-      if (!isWalletConnected) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        // Get wallet address
-        const connectionStatus = await walletService.checkConnection();
-        const walletAddress = connectionStatus.address;
-
-        if (!walletAddress) {
-          throw new Error('Wallet address not found');
-        }
-
-        console.log('📡 Fetching dashboard data for:', walletAddress);
-        
-        // Fetch real dashboard data from backend
-        const response = await defiService.getDashboard(walletAddress);
-        
-        if (response && response.success) {
-          setDashboardData(response.data);
-          console.log('✅ Dashboard data loaded:', response.data);
-        } else {
-          // Use mock data if API call fails (for development)
-          console.log('⚠️ Using mock dashboard data');
-          setDashboardData({
-            wallet: {
-              address: walletAddress,
-              balance: 0,
-              network: 'celo-alfajores',
-              totalDeposited: 0,
-              totalYieldEarned: 0
-            },
-            stats: {
-              activeVaults: 0,
-              completedVaults: 0,
-              totalVaults: 0,
-              groupVaults: 0,
-              averageAPY: 8.5,
-              portfolioHealth: 0
-            },
-            vaults: {
-              individual: [],
-              group: []
-            },
-            recentActivity: [],
-            insights: {
-              totalProgress: 0,
-              estimatedMonthlyYield: 0,
-              nextMilestone: null
-            }
-          });
-        }
-      } catch (error) {
-        console.error('❌ Error fetching dashboard data:', error);
-        // Use mock data instead of showing error for better UX
-        setDashboardData({
-          wallet: {
-            address: walletAddress || 'Unknown',
-            balance: 0,
-            network: 'celo-alfajores',
-            totalDeposited: 0,
-            totalYieldEarned: 0
-          },
-          stats: {
-            activeVaults: 0,
-            completedVaults: 0,
-            totalVaults: 0,
-            groupVaults: 0,
-            averageAPY: 8.5,
-            portfolioHealth: 0
-          },
-          vaults: {
-            individual: [],
-            group: []
-          },
-          recentActivity: [],
-          insights: {
-            totalProgress: 0,
-            estimatedMonthlyYield: 0,
-            nextMilestone: null
-          }
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // Only fetch data if wallet is connected
-    if (isWalletConnected) {
-    fetchDashboardData();
+    if (!isWalletConnected || !address) {
+      setIsLoading(false);
+      setDashboardData(null);
+      return;
     }
-  }, [toast, isWalletConnected]);
+
+    // Set dashboard data from wallet info
+    setDashboardData({
+      wallet: {
+        address: address,
+        balance: balance || 0,
+        network: 'celo-alfajores',
+        totalDeposited: 0,
+        totalYieldEarned: 0
+      },
+      stats: {
+        activeVaults: 0,
+        completedVaults: 0,
+        totalVaults: 0,
+        groupVaults: 0,
+        averageAPY: 8.5,
+        portfolioHealth: 0
+      },
+      vaults: {
+        individual: [],
+        group: []
+      },
+      recentActivity: [],
+      insights: {
+        totalProgress: 0,
+        estimatedMonthlyYield: 0,
+        nextMilestone: null
+      }
+    });
+    setIsLoading(false);
+  }, [isWalletConnected, address, balance]);
 
   // Use mock Web3 achievements instead of fetching Web2 data
   useEffect(() => {

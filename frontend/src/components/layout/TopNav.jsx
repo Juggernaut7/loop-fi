@@ -273,12 +273,12 @@ const TopNav = ({ toggleSidebar, isCollapsed, unreadCount = 0 }) => {
                       Copy Wallet Address
                     </motion.button>
                     <motion.button 
-                      onClick={() => window.open(`https://explorer.stacks.co/address/${walletAddress}`, '_blank')}
+                      onClick={() => window.open(`https://alfajores.celoscan.io/address/${walletAddress}`, '_blank')}
                       className="w-full flex items-center px-4 py-2 font-body text-body-sm text-loopfund-neutral-700 dark:text-loopfund-neutral-300 hover:bg-loopfund-neutral-100 dark:hover:bg-loopfund-midnight-800/50 transition-colors"
                       whileHover={{ x: 2 }}
                     >
                       <ExternalLink size={16} className="mr-3" />
-                      View on Explorer
+                      View on Celoscan
                     </motion.button>
                     <motion.button 
                       onClick={handleSettingsClick}

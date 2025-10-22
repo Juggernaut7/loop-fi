@@ -192,47 +192,48 @@ const LandingPage = () => {
       
       
       {/* Hero Section */}
-      <section className="relative pt-24 md:pt-32 pb-20">
+      <section className="relative pt-20 sm:pt-24 md:pt-32 pb-12 sm:pb-16 md:pb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[600px]">
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h1 className="font-display text-h1 md:text-display-lg text-loopfund-neutral-900 dark:text-loopfund-dark-text leading-tight">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-[500px] sm:min-h-[550px] md:min-h-[600px]">
+            <div className="space-y-6 sm:space-y-8">
+              <div className="space-y-4 sm:space-y-6">
+                <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-loopfund-neutral-900 dark:text-loopfund-dark-text leading-tight">
                   Your AI-Powered{' '}
                   <span className="bg-gradient-to-r from-loopfund-emerald-600 to-loopfund-coral-600 bg-clip-text text-transparent">
                     DeFi Advisor on Celo
                   </span>
                 </h1>
-                <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed max-w-xl">
+                <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed max-w-xl">
                   Transform your savings into DeFi yield with AI-powered recommendations on Celo's mobile-first blockchain. 
                   Earn up to 15.7% APY through smart contracts on Celo.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <LoopFundButton
                       variant="primary"
                       size="lg"
                       onClick={handleConnectWallet}
-                      className="group px-8 py-4 text-lg font-semibold"
+                      className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold min-h-[48px]"
                     >
-                      Connect Wallet & Start Earning
-                      <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-200" />
+                      <span className="hidden sm:inline">Connect Wallet & Start Earning</span>
+                      <span className="sm:hidden">Connect Wallet</span>
+                      <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-200" />
                     </LoopFundButton>
                 <LoopFundButton
                   variant="secondary"
                   size="lg"
                   onClick={handleWatchDemo}
-                  className="group px-8 py-4 text-lg font-semibold"
+                  className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold min-h-[48px]"
                 >
-                  <Play className="w-5 h-5 mr-2 transition-transform duration-200" />
-                  Watch DeFi Demo
+                  <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2 transition-transform duration-200" />
+                  Watch Demo
                 </LoopFundButton>
               </div>
             </div>
 
-            <div className="relative flex justify-center lg:justify-end items-center h-full">
-              <div className="w-full max-w-md">
+            <div className="relative flex justify-center lg:justify-end items-center h-full mt-8 lg:mt-0">
+              <div className="w-full max-w-[280px] sm:max-w-sm md:max-w-md">
                 <Lottie animationData={heroAnimation} loop={true} />
               </div>
             </div>
@@ -241,31 +242,31 @@ const LandingPage = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-h2 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-3 sm:mb-4">
               Trusted by Thousands
             </h2>
-            <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+            <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
               Join our growing community of successful savers
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {stats.map((stat, index) => (
-              <LoopFundCard key={stat.label} className="p-6 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="font-body text-body-sm font-medium text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-1">
+              <LoopFundCard key={stat.label} className="p-3 sm:p-4 md:p-6 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2 sm:gap-0">
+                  <div className="flex-1 w-full">
+                    <p className="font-body text-xs sm:text-sm font-medium text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-1">
                       {stat.label}
                     </p>
-                    <p className="font-display text-h3 text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+                    <p className="font-display text-xl sm:text-2xl md:text-3xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
                       {stat.value}
                     </p>
                   </div>
-                  <div className="p-3 bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/30 rounded-full">
-                    <stat.icon className="w-6 h-6 text-loopfund-emerald-600 dark:text-loopfund-emerald-400" />
+                  <div className="p-2 sm:p-2.5 md:p-3 bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/30 rounded-full">
+                    <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-loopfund-emerald-600 dark:text-loopfund-emerald-400" />
                   </div>
                 </div>
               </LoopFundCard>
@@ -275,30 +276,30 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-loopfund-dark-surface">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-loopfund-dark-surface">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-h1 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4 sm:mb-6 px-4">
               Revolutionary Financial Wellness Features
             </h2>
-            <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed px-4">
               The only app that combines AI therapy, community support, and behavioral interventions 
               to transform your relationship with money.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {features.map((feature, index) => (
-              <LoopFundCard key={feature.title} className="p-6 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 rounded-xl flex items-center justify-center shadow-loopfund mr-4">
-                    <feature.icon className="w-6 h-6 text-white" />
+              <LoopFundCard key={feature.title} className="p-4 sm:p-5 md:p-6 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
+                <div className="flex items-center mb-3 sm:mb-4">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 rounded-xl flex items-center justify-center shadow-loopfund mr-3 sm:mr-4 flex-shrink-0">
+                    <feature.icon className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6 text-white" />
                   </div>
-                  <h3 className="font-display text-h4 text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+                  <h3 className="font-display text-base sm:text-lg md:text-xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
                     {feature.title}
                   </h3>
                 </div>
-                <p className="font-body text-body text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+                <p className="font-body text-sm sm:text-base text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed">
                   {feature.description}
                 </p>
               </LoopFundCard>
@@ -309,35 +310,35 @@ const LandingPage = () => {
 
 
       {/* Goal Examples Section */}
-      <section className="py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="font-display text-display-xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4 sm:mb-6 px-4">
               What Are You Saving For?
             </h2>
-            <p className="font-body text-body-xl text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed px-4">
               From personal dreams to shared adventures, discover how LoopFi helps you achieve any financial goal.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {goalExamples.map((goal, index) => (
-              <LoopFundCard key={index} className="p-8 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 rounded-xl flex items-center justify-center shadow-loopfund mr-4">
-                    <goal.icon className="w-7 h-7 text-white" />
+              <LoopFundCard key={index} className="p-4 sm:p-6 md:p-8 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 rounded-xl flex items-center justify-center shadow-loopfund">
+                    <goal.icon className="w-6 h-6 sm:w-6.5 sm:h-6.5 md:w-7 md:h-7 text-white" />
                   </div>
-                  <span className="px-4 py-2 rounded-full text-sm font-semibold bg-loopfund-emerald-100 text-loopfund-emerald-700 dark:bg-loopfund-emerald-900/30 dark:text-loopfund-emerald-300">
+                  <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-loopfund-emerald-100 text-loopfund-emerald-700 dark:bg-loopfund-emerald-900/30 dark:text-loopfund-emerald-300">
                     {goal.type === 'individual' ? 'Individual' : 'Group'}
                   </span>
                 </div>
-                <h3 className="font-display text-h4 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-3">
+                <h3 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-2 sm:mb-3">
                   {goal.title}
                 </h3>
-                <p className="font-display text-h3 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-2">
+                <p className="font-display text-xl sm:text-2xl md:text-3xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-1 sm:mb-2">
                   {goal.amount}
                 </p>
-                <p className="text-sm font-semibold text-green-600 dark:text-green-400">
+                <p className="text-xs sm:text-sm font-semibold text-green-600 dark:text-green-400">
                   {goal.apy} APY
                 </p>
               </LoopFundCard>
@@ -347,38 +348,38 @@ const LandingPage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="font-display text-h1 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4 sm:mb-6 px-4">
               Loved by Thousands
             </h2>
-            <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 max-w-3xl mx-auto leading-relaxed px-4">
               See how LoopFi is helping people achieve their financial dreams, both individually and together.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {testimonials.map((testimonial, index) => (
-              <LoopFundCard key={index} className="p-8 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
-                <div className="flex items-center mb-6">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 flex items-center justify-center text-white font-semibold text-lg mr-4 shadow-loopfund">
+              <LoopFundCard key={index} className="p-4 sm:p-6 md:p-8 dark:bg-loopfund-dark-surface dark:border-loopfund-dark-elevated">
+                <div className="flex items-center mb-4 sm:mb-6">
+                  <div className="w-12 h-12 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 flex items-center justify-center text-white font-semibold text-base sm:text-lg mr-3 sm:mr-4 shadow-loopfund flex-shrink-0">
                     {testimonial.avatar}
                   </div>
                   <div>
-                    <h4 className="font-display text-h4 text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+                    <h4 className="font-display text-base sm:text-lg md:text-xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
                       {testimonial.name}
                     </h4>
-                    <p className="font-body text-body-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+                    <p className="font-body text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
                       {testimonial.role}
                     </p>
                   </div>
                 </div>
-                <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed mb-6">
+                <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed mb-4 sm:mb-6">
                   "{testimonial.content}"
                 </p>
                 <div className="flex items-center">
-                  <span className="px-4 py-2 rounded-full text-sm font-semibold bg-loopfund-emerald-100 text-loopfund-emerald-700 dark:bg-loopfund-emerald-900/30 dark:text-loopfund-emerald-300">
+                  <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-loopfund-emerald-100 text-loopfund-emerald-700 dark:bg-loopfund-emerald-900/30 dark:text-loopfund-emerald-300">
                     {testimonial.type === 'individual' ? 'Individual Saver' : 'Group Saver'}
                   </span>
                 </div>
@@ -389,31 +390,32 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-loopfund-emerald-600 via-loopfund-coral-600 to-loopfund-gold-600">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-r from-loopfund-emerald-600 via-loopfund-coral-600 to-loopfund-gold-600">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-display-xl text-white mb-6">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-4 sm:mb-6 px-4">
               Ready to Earn DeFi Yield on Celo?
             </h2>
-            <p className="font-body text-body-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="font-body text-sm sm:text-base md:text-lg text-white/90 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-4">
               Connect your Celo wallet and start earning up to 15.7% APY through AI-optimized DeFi strategies 
               secured by Celo's mobile-first blockchain.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center px-4">
               <LoopFundButton
                 variant="primary"
                 size="lg"
                 onClick={handleConnectWallet}
-                className="group bg-white text-loopfund-neutral-900 hover:bg-loopfund-neutral-50"
+                className="group bg-white text-loopfund-neutral-900 hover:bg-loopfund-neutral-50 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 min-h-[48px]"
               >
-                Connect Wallet & Start Earning
-                <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-200" />
+                <span className="hidden sm:inline">Connect Wallet & Start Earning</span>
+                <span className="sm:hidden">Connect Wallet</span>
+                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-200" />
               </LoopFundButton>
               <LoopFundButton
                 variant="outline"
                 size="lg"
                 onClick={handleWatchDemo}
-                className="border-2 border-white text-white hover:bg-white hover:text-loopfund-neutral-900"
+                className="border-2 border-white text-white hover:bg-white hover:text-loopfund-neutral-900 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 min-h-[48px]"
               >
                 Watch DeFi Demo
               </LoopFundButton>
@@ -424,83 +426,83 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="bg-loopfund-neutral-900 dark:bg-loopfund-dark-bg text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 md:gap-12">
             
             {/* Brand Section */}
             <div className="lg:col-span-1">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-coral-500 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+              <div className="flex items-center space-x-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-coral-500 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
                   <img src={logo1} alt="LoopFi" className="w-full h-full object-cover rounded-xl" />
                 </div>
-                <span className="font-display text-h3 text-white">LoopFi</span>
+                <span className="font-display text-xl sm:text-2xl text-white">LoopFi</span>
               </div>
-              <p className="font-body text-body-md text-white/80 leading-relaxed mb-6">
+              <p className="font-body text-sm sm:text-base text-white/80 leading-relaxed mb-4 sm:mb-6">
                 Transform your savings into DeFi yield with AI-powered recommendations on Celo's mobile-first blockchain.
               </p>
-              <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-emerald-600">
-                  <Facebook className="w-5 h-5 text-white" />
+              <div className="flex space-x-3 sm:space-x-4">
+                <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-emerald-600 min-h-[44px] min-w-[44px]">
+                  <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-coral-600">
-                  <Twitter className="w-5 h-5 text-white" />
+                <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-coral-600 min-h-[44px] min-w-[44px]">
+                  <Twitter className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-gold-600">
-                  <Linkedin className="w-5 h-5 text-white" />
+                <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-gold-600 min-h-[44px] min-w-[44px]">
+                  <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-lavender-600">
-                  <Instagram className="w-5 h-5 text-white" />
+                <a href="#" className="w-9 h-9 sm:w-10 sm:h-10 bg-loopfund-neutral-700 rounded-xl flex items-center justify-center transition-colors duration-200 hover:bg-loopfund-lavender-600 min-h-[44px] min-w-[44px]">
+                  <Instagram className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </a>
               </div>
             </div>
 
             {/* Product Links */}
             <div className="lg:col-span-1">
-              <h3 className="text-xl font-bold mb-6 text-white">Product</h3>
-              <ul className="space-y-4">
-                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg cursor-pointer">Get Started</button></li>
-                <li><a href="#features" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Features</a></li>
-                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg cursor-pointer">Join DeFi Pool</button></li>
-                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg cursor-pointer">Connect Wallet</button></li>
-                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Pricing</a></li>
+              <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">Product</h3>
+              <ul className="space-y-3 sm:space-y-4">
+                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base cursor-pointer text-left min-h-[44px] flex items-center">Get Started</button></li>
+                <li><a href="#features" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Features</a></li>
+                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base cursor-pointer text-left min-h-[44px] flex items-center">Join DeFi Pool</button></li>
+                <li><button onClick={handleConnectWallet} className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base cursor-pointer text-left min-h-[44px] flex items-center">Connect Wallet</button></li>
+                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Pricing</a></li>
               </ul>
             </div>
 
             {/* Company Links */}
             <div className="lg:col-span-1">
-              <h3 className="text-xl font-bold mb-6 text-white">Company</h3>
-              <ul className="space-y-4">
-                <li><Link to="/#about" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">About Us</Link></li>
-                <li><Link to="/#contact" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Contact</Link></li>
-                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Blog</a></li>
-                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Careers</a></li>
-                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Help Center</a></li>
+              <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">Company</h3>
+              <ul className="space-y-3 sm:space-y-4">
+                <li><Link to="/#about" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">About Us</Link></li>
+                <li><Link to="/#contact" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Contact</Link></li>
+                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Blog</a></li>
+                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Careers</a></li>
+                <li><a href="#" className="text-loopfund-neutral-300 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Help Center</a></li>
               </ul>
             </div>
 
             {/* Newsletter Signup */}
-            <div className="lg:col-span-1">
-              <h3 className="text-xl font-bold mb-6 text-white">Stay Updated</h3>
-              <p className="text-slate-300 text-lg mb-6">
+            <div className="lg:col-span-1 sm:col-span-2 lg:col-span-1">
+              <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">Stay Updated</h3>
+              <p className="text-slate-300 text-sm sm:text-base mb-4 sm:mb-6">
                 Get the latest financial tips and updates delivered to your inbox.
               </p>
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-2">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex flex-col gap-2">
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 bg-loopfund-neutral-700 border border-loopfund-neutral-600 rounded-xl sm:rounded-l-xl sm:rounded-r-none text-white placeholder-loopfund-neutral-400 focus:outline-none focus:ring-2 focus:ring-loopfund-emerald-500 focus:border-transparent min-w-0 font-body text-body-sm"
+                    className="w-full px-4 py-3 bg-loopfund-neutral-700 border border-loopfund-neutral-600 rounded-xl text-white placeholder-loopfund-neutral-400 focus:outline-none focus:ring-2 focus:ring-loopfund-emerald-500 focus:border-transparent font-body text-sm sm:text-base min-h-[48px]"
                   />
                   <LoopFundButton
                     variant="primary"
                     size="md"
                     onClick={handleNewsletterSubscribe}
-                    className="sm:rounded-l-none sm:rounded-r-xl whitespace-nowrap"
+                    className="w-full whitespace-nowrap min-h-[48px]"
                   >
                     Subscribe
                   </LoopFundButton>
                 </div>
-                <p className="text-slate-400 text-sm">
+                <p className="text-slate-400 text-xs sm:text-sm">
                   Join 10,000+ users getting financial insights weekly.
                 </p>
               </div>
@@ -510,21 +512,21 @@ const LandingPage = () => {
 
         {/* Bottom Section */}
         <div className="border-t border-slate-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-                <p className="text-slate-400 text-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 gap-4">
+              <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-6 text-center md:text-left">
+                <p className="text-slate-400 text-sm sm:text-base">
                   © 2024 LoopFi. All rights reserved.
                 </p>
-                <div className="flex space-x-6">
-                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Privacy Policy</a>
-                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Terms of Service</a>
-                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-body-lg">Cookie Policy</a>
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Privacy Policy</a>
+                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Terms of Service</a>
+                  <a href="#" className="text-loopfund-neutral-400 hover:text-loopfund-emerald-400 transition-colors duration-200 font-body text-sm sm:text-base min-h-[44px] flex items-center">Cookie Policy</a>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-loopfund-emerald-500 rounded-full animate-pulse"></div>
-                <span className="text-loopfund-neutral-400 font-body text-body-lg">All systems operational</span>
+                <span className="text-loopfund-neutral-400 font-body text-xs sm:text-sm md:text-base">All systems operational</span>
               </div>
             </div>
           </div>
@@ -534,10 +536,10 @@ const LandingPage = () => {
       {/* Simple Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gradient-to-r from-loopfund-emerald-600 to-loopfund-coral-600 hover:from-loopfund-emerald-700 hover:to-loopfund-coral-700 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-loopfund-emerald-600 to-loopfund-coral-600 hover:from-loopfund-emerald-700 hover:to-loopfund-coral-700 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center min-h-[48px] min-w-[48px]"
         aria-label="Scroll to top"
       >
-        <ArrowRight className="w-5 h-5 text-white transform rotate-[-90deg]" />
+        <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-white transform rotate-[-90deg]" />
       </button>
     </div>
   );

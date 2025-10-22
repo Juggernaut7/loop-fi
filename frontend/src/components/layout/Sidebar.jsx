@@ -42,7 +42,7 @@ import {
 import walletService from '../../services/walletService';
 import logo1 from '../../assets/logo1.jpg';
 
-const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
+const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0, isMobileOpen, closeMobileSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeSubmenu, setActiveSubmenu] = useState(null);
@@ -165,10 +165,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
     setActiveSubmenu(activeSubmenu === title ? null : title);
   };
 
-  // Animation variants
+  // Animation variants - different for mobile and desktop
   const sidebarVariants = {
-    expanded: { width: 300 },
-    collapsed: { width: 80 }
+    expanded: { 
+      width: typeof window !== 'undefined' && window.innerWidth < 1024 ? '85vw' : 300 
+    },
+    collapsed: { 
+      width: typeof window !== 'undefined' && window.innerWidth < 1024 ? '85vw' : 80 
+    }
   };
 
   const contentVariants = {
@@ -195,7 +199,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
       initial={isCollapsed ? "collapsed" : "expanded"}
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="h-full max-h-screen bg-gradient-to-br from-loopfund-midnight-900 via-loopfund-midnight-800 to-loopfund-midnight-900 border-r border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 shadow-xl flex flex-col overflow-hidden relative"
+      className="h-full max-h-screen bg-gradient-to-br from-loopfund-midnight-900 via-loopfund-midnight-800 to-loopfund-midnight-900 border-r border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 shadow-xl flex flex-col overflow-hidden relative
+      w-[85vw] max-w-[320px] sm:max-w-[280px] lg:w-auto"
     >
       {/* Revolutionary Background Pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -209,28 +214,29 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
       <div className="absolute bottom-20 right-4 w-12 h-12 bg-loopfund-emerald-500/10 rounded-full blur-xl animate-float-delayed" />
 
       {/* Header Section */}
-      <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 relative z-10">
+      <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-6 border-b border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 relative z-10">
         <motion.div
           variants={contentVariants}
           animate={isCollapsed ? "collapsed" : "expanded"}
           className="flex items-center space-x-3"
         >
-          {!isCollapsed && (
+          {/* Always show logo on mobile */}
+          {(!isCollapsed || (typeof window !== 'undefined' && window.innerWidth < 1024)) && (
             <div className="flex items-center space-x-3">
               <motion.div 
-                className="w-10 h-10 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-coral-500 rounded-xl flex items-center justify-center shadow-lg overflow-hidden p-1"
+                className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-coral-500 rounded-xl flex items-center justify-center shadow-lg overflow-hidden p-1"
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <img src={logo1} alt="LoopFi" className="w-full h-full object-cover rounded-lg" />
               </motion.div>
-              <span className="font-display text-display-sm text-loopfund-neutral-50 font-bold">LoopFi</span>
+              <span className="font-display text-xl sm:text-2xl text-loopfund-neutral-50 font-bold">LoopFi</span>
             </div>
           )}
         </motion.div>
         
         <motion.button
           onClick={toggleSidebar}
-          className="p-2 rounded-xl bg-loopfund-neutral-800/50 text-loopfund-neutral-300 transition-all duration-200 backdrop-blur-sm"
+          className="p-2 rounded-xl bg-loopfund-neutral-800/50 text-loopfund-neutral-300 transition-all duration-200 backdrop-blur-sm min-h-[44px] min-w-[44px] flex items-center justify-center"
           whileTap={{ scale: 0.95 }}
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
@@ -238,25 +244,26 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
       </div>
 
       {/* User Profile Section */}
-      <div className="flex-shrink-0 p-6 border-b border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 relative z-10">
+      <div className="flex-shrink-0 p-4 sm:p-6 border-b border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 relative z-10">
         <div className="flex items-center space-x-3">
           <motion.div 
-            className="w-12 h-12 bg-gradient-to-br from-loopfund-coral-500 to-loopfund-gold-500 rounded-xl flex items-center justify-center shadow-lg"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-loopfund-coral-500 to-loopfund-gold-500 rounded-xl flex items-center justify-center shadow-lg"
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            <User size={20} className="text-white" />
+            <User size={18} className="sm:w-5 sm:h-5 text-white" />
           </motion.div>
           <motion.div
             variants={contentVariants}
             animate={isCollapsed ? "collapsed" : "expanded"}
             className="flex-1 min-w-0"
           >
-            {!isCollapsed && (
+            {/* Always show on mobile */}
+            {(!isCollapsed || (typeof window !== 'undefined' && window.innerWidth < 1024)) && (
               <>
-                <p className="font-body text-body-sm text-loopfund-neutral-50 font-medium truncate">
+                <p className="font-body text-xs sm:text-sm text-loopfund-neutral-50 font-medium truncate">
                   {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Wallet'}
                 </p>
-                <p className="font-body text-body-xs text-loopfund-neutral-400 truncate">
+                <p className="font-body text-xs text-loopfund-neutral-400 truncate">
                   {walletAddress ? 'Connected' : 'Not Connected'}
                 </p>
               </>
@@ -284,9 +291,12 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
                       setShowComingSoonModal(true);
                     } else if (item.submenu) {
                       toggleSubmenu(item.title);
+                    } else if (closeMobileSidebar && typeof window !== 'undefined' && window.innerWidth < 1024) {
+                      // Close mobile sidebar when link is clicked
+                      closeMobileSidebar();
                     }
                   }}
-                  className={`group flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden ${
+                  className={`group flex items-center px-3 sm:px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 relative overflow-hidden min-h-[48px] ${
                     isActive(item.path)
                       ? 'bg-loopfund-emerald-500/20 text-loopfund-emerald-400 border border-loopfund-emerald-500/30 shadow-lg'
                       : 'text-loopfund-neutral-300'
@@ -306,14 +316,15 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
                   <motion.div
                     variants={contentVariants}
                     animate={isCollapsed ? "collapsed" : "expanded"}
-                    className="flex-1 min-w-0 ml-3"
+                    className="flex-1 min-w-0 ml-2 sm:ml-3"
                   >
-                    {!isCollapsed && (
+                    {/* Always show on mobile */}
+                    {(!isCollapsed || (typeof window !== 'undefined' && window.innerWidth < 1024)) && (
                       <>
                         <div className="flex items-center justify-between">
-                          <span className="font-body text-body-sm font-medium">{item.title}</span>
+                          <span className="font-body text-xs sm:text-sm font-medium">{item.title}</span>
                           {item.badge && (
-                            <span className={`ml-auto text-loopfund-neutral-50 text-xs px-2 py-1 rounded-full font-medium ${
+                            <span className={`ml-auto text-loopfund-neutral-50 text-xs px-2 py-0.5 sm:py-1 rounded-full font-medium ${
                               item.highlight 
                                 ? 'bg-loopfund-emerald-500' 
                                 : 'bg-loopfund-neutral-600'
@@ -331,7 +342,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
                           )}
                         </div>
                         {item.description && (
-                          <p className="text-xs text-loopfund-neutral-400 mt-0.5">{item.description}</p>
+                          <p className="text-xs text-loopfund-neutral-400 mt-0.5 hidden sm:block">{item.description}</p>
                         )}
                       </>
                     )}
@@ -403,22 +414,29 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0 }) => {
       </div>
 
       {/* New Goal Button - Always at bottom */}
-      <div className="flex-shrink-0 p-4 relative z-10">
+      <div className="flex-shrink-0 p-3 sm:p-4 relative z-10">
         <motion.div
           variants={contentVariants}
           animate={isCollapsed ? "collapsed" : "expanded"}
         >
-          {!isCollapsed && (
+          {/* Always show on mobile */}
+          {(!isCollapsed || (typeof window !== 'undefined' && window.innerWidth < 1024)) && (
             <motion.button
-              onClick={() => navigate('/goals/new')}
-              className="w-full bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg relative overflow-hidden group"
+              onClick={() => {
+                navigate('/goals/new');
+                // Close mobile sidebar after navigation
+                if (closeMobileSidebar && typeof window !== 'undefined' && window.innerWidth < 1024) {
+                  closeMobileSidebar();
+                }
+              }}
+              className="w-full bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg relative overflow-hidden group min-h-[48px]"
               whileTap={{ scale: 0.98 }}
             >
               {/* Shimmer effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full transition-transform duration-1000" />
               
-              <Plus size={18} className="relative z-10" />
-              <span className="font-body text-body-sm font-medium relative z-10">New Goal</span>
+              <Plus size={16} className="sm:w-[18px] sm:h-[18px] relative z-10" />
+              <span className="font-body text-xs sm:text-sm font-medium relative z-10">New Goal</span>
             </motion.button>
           )}
         </motion.div>

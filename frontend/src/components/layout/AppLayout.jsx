@@ -8,6 +8,7 @@ import walletService from '../../services/walletService';
 
 const AppLayout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -85,23 +86,56 @@ const AppLayout = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-loopfund-neutral-100 via-loopfund-neutral-50 to-loopfund-emerald-50/30 dark:from-loopfund-midnight-900 dark:via-loopfund-midnight-800 dark:to-loopfund-midnight-900">
       <div className="flex h-screen">
-        {/* Sidebar */}
-        <Sidebar 
-          isCollapsed={isSidebarCollapsed} 
-          toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-        />
+        {/* Mobile Sidebar Backdrop */}
+        {isMobileSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMobileSidebarOpen(false)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          />
+        )}
+
+        {/* Sidebar - Hidden on mobile, shown as overlay when toggled */}
+        <div className={`
+          fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto
+          transform transition-transform duration-300 ease-in-out lg:transform-none
+          ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
+          <Sidebar 
+            isCollapsed={isSidebarCollapsed} 
+            toggleSidebar={() => {
+              setIsSidebarCollapsed(!isSidebarCollapsed);
+              // Close mobile sidebar when toggle is clicked on mobile
+              if (window.innerWidth < 1024) {
+                setIsMobileSidebarOpen(false);
+              }
+            }}
+            isMobileOpen={isMobileSidebarOpen}
+            closeMobileSidebar={() => setIsMobileSidebarOpen(false)}
+          />
+        </div>
         
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden w-full">
           {/* Top Navigation */}
           <TopNav 
-            toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            toggleSidebar={() => {
+              // On mobile, toggle mobile sidebar
+              if (window.innerWidth < 1024) {
+                setIsMobileSidebarOpen(!isMobileSidebarOpen);
+              } else {
+                // On desktop, toggle collapsed state
+                setIsSidebarCollapsed(!isSidebarCollapsed);
+              }
+            }}
             isCollapsed={isSidebarCollapsed}
           />
           
           {/* Page Content */}
           <main className="flex-1 overflow-y-auto">
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

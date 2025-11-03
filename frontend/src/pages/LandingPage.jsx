@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import walletService from '../services/walletService';
 import { useToast } from '../context/ToastContext';
 import { 
@@ -36,6 +36,7 @@ import LoopFundCard from '../components/ui/LoopFundCard';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -77,6 +78,25 @@ const LandingPage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // If navigation passes a scroll target in state (navigate('/', { state: { scrollTo: 'features' }})),
+  // scroll to the section after mount.
+  useEffect(() => {
+    if (location && location.state && location.state.scrollTo) {
+      const id = location.state.scrollTo;
+      // small timeout to allow the landing page to render content
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // clear the state so subsequent navigations don't re-trigger
+        try {
+          navigate(location.pathname, { replace: true, state: {} });
+        } catch (e) {
+          // ignore
+        }
+      }, 120);
+    }
+  }, [location, navigate]);
 
 
   const stats = [
@@ -275,8 +295,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-loopfund-dark-surface">
+  {/* Features Section */}
+  <section id="features" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-loopfund-dark-surface">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4 sm:mb-6 px-4">
@@ -308,6 +328,21 @@ const LandingPage = () => {
         </div>
       </section>
 
+
+      {/* About Section (anchor target for About link) */}
+      <section id="about" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4">
+              About LoopFi
+            </h2>
+            <p className="font-body text-sm sm:text-base md:text-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 leading-relaxed">
+              LoopFi combines AI-driven financial advice with secure smart contract vaults on the Celo blockchain.
+              We help individuals and groups save, earn yield, and reach financial goals through transparent, mobile-first DeFi tooling.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Goal Examples Section */}
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-loopfund-neutral-50 dark:bg-loopfund-dark-bg">
@@ -424,8 +459,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-loopfund-neutral-900 dark:bg-loopfund-dark-bg text-white">
+  {/* Footer */}
+  <footer id="contact" className="bg-loopfund-neutral-900 dark:bg-loopfund-dark-bg text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 md:gap-12">
             

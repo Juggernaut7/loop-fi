@@ -43,14 +43,42 @@ const Navigation = () => {
     }
   };
 
+  // Use hash paths for in-page sections (no leading slash). Remove old '/defi' route.
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Dashboard', path: '/dashboard' }, // Main dashboard
-    { name: 'DeFi', path: '/defi' }, // DeFi overview
-    { name: 'Features', path: '/#features' },
-    { name: 'About', path: '/#about' },
-    { name: 'Contact', path: '/#contact' }
+    { name: 'Features', path: '#features' },
+    { name: 'About', path: '#about' },
+    { name: 'Contact', path: '#contact' }
   ];
+
+  // Click handler supports two behaviors:
+  // - If the link is a hash (e.g. '#features') and we're on the landing page ("/"), scroll into view.
+  // - If the link is a hash but we're on another route, navigate to '/' and pass a state value so
+  //   the landing page can scroll to the requested section after mount.
+  // - Otherwise navigate using react-router normally.
+  const handleNavClick = (e, item) => {
+    // Allow normal cmd/click or new tab behavior if modifier keys are used
+    if (e && (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) return;
+    e && e.preventDefault();
+
+    if (item.path && item.path.startsWith('#')) {
+      const id = item.path.slice(1);
+      if (location.pathname === '/') {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+      // Not on landing page: navigate to landing and pass scroll target via state
+      navigate('/', { state: { scrollTo: id } });
+      return;
+    }
+
+    // Regular route navigation
+    navigate(item.path);
+  };
 
   return (
     <motion.nav
@@ -97,8 +125,9 @@ const Navigation = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Link
-                  to={item.path}
+                <a
+                  href={item.path}
+                  onClick={(e) => handleNavClick(e, item)}
                   className={`font-body text-body-sm font-medium transition-all duration-300 relative group ${
                     isActive(item.path)
                       ? 'text-loopfund-emerald-600 dark:text-loopfund-emerald-400'
@@ -116,7 +145,7 @@ const Navigation = () => {
                     whileHover={{ width: '100%' }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
                   />
-                </Link>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -194,9 +223,12 @@ const Navigation = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Link
-                    to={item.path}
-                    onClick={() => setIsOpen(false)}
+                  <a
+                    href={item.path}
+                    onClick={(e) => {
+                      setIsOpen(false);
+                      handleNavClick(e, item);
+                    }}
                     className={`block font-body text-body-md font-medium transition-all duration-300 ${
                       isActive(item.path)
                         ? 'text-loopfund-emerald-600 dark:text-loopfund-emerald-400'
@@ -204,7 +236,7 @@ const Navigation = () => {
                     }`}
                   >
                     {item.name}
-                  </Link>
+                  </a>
                 </motion.div>
               ))}
               

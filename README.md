@@ -96,7 +96,7 @@ LoopFi transforms traditional savings into a **modern, blockchain-powered experi
          │ ethers.js                                                          
          ▼                                                                     
 ┌─────────────────────────────────────────────────────────────────────┐
-│                      CELO BLOCKCHAIN (Alfajores)                     │
+│                      CELO BLOCKCHAIN (Celo Sepolia)                  │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                       │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
@@ -129,24 +129,24 @@ LoopFi transforms traditional savings into a **modern, blockchain-powered experi
 
 ## 📦 Deployed Smart Contracts
 
-### 🌐 **Celo Alfajores Testnet**
+### 🌐 **Celo Sepolia Testnet (Celo Sepolia)**
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
-| **SavingsGoal** | `0xdAdc4B753D0B76147fe3b77623AC7f83783E3b62` | Personal savings goals with 8.5% APY |
-| **GroupPool** | `0x74864Cb942cf73aFABc9633438c1Bb060d7FEa94` | Group savings pools with 10% APY |
+| **SavingsGoal** | `0xDDe8A1dc4bB1C60Cc8fB9272de258E30d1A0ddaa` | Personal savings goals with 8.5% APY |
+| **GroupPool** | `0x62165331a04afD35Da0aB494481dE9E6503E6DBE` | Group savings pools with 10% APY |
 | **StakingPool** | `0xEb74C4f01EE73c8151509a7F89e201Acfcd7E2E6` | CELO staking with 8.5% APY |
-| **SavingsBadgeNFT** | `0x3061d039c044321AA6615ce6C087adBf18ACEf49` | Achievement NFT rewards |
-| **LoopFi (Main)** | `0x986BB77aF6e06C8f96Ae5EaA1DBb394df83AF425` | Main contract integrator |
+| **SavingsBadgeNFT** | `0x5088aE782cA3FeC3022c525F8697637b3586Bc81` | Achievement NFT rewards |
+| **LoopFi (Main)** | `0x66cB8258897bc234A9da8b47C92B36C6579e3CE8` | Main contract integrator |
 
-### 🪙 **Token Addresses (Alfajores)**
+### 🪙 **Token Addresses (Celo Sepolia)**
 
 | Token | Address | Description |
 |-------|---------|-------------|
 | **CELO** | `0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9` | Native Celo token (wrapped) |
 | **cUSD** | `0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1` | Celo Dollar stablecoin |
 
-> 🔗 **Verify on Celoscan:** [alfajores.celoscan.io](https://alfajores.celoscan.io/)
+> 🔗 **Verify on Celo Sepolia explorer:** use your preferred Celo explorer for Sepolia (addresses are on the Celo Sepolia testnet)
 
 ---
 
@@ -245,7 +245,7 @@ LoopFi transforms traditional savings into a **modern, blockchain-powered experi
 - 🔗 Solidity ^0.8.19
 - ⛑️ Hardhat
 - 🧪 OpenZeppelin
-- 🌐 Celo (Alfajores)
+- 🌐 Celo (Celo Sepolia)
 - 📊 ethers.js
 
 </td>
@@ -353,9 +353,9 @@ cp env.example .env.local
 
 # Configure .env.local (use deployed addresses)
 VITE_API_URL=http://localhost:4000/api
-VITE_CELO_NETWORK=alfajores
-VITE_SAVINGS_GOAL_CONTRACT=0xdAdc4B753D0B76147fe3b77623AC7f83783E3b62
-VITE_GROUP_POOL_CONTRACT=0x74864Cb942cf73aFABc9633438c1Bb060d7FEa94
+VITE_CELO_NETWORK=celo-sepolia
+VITE_SAVINGS_GOAL_CONTRACT=0xDDe8A1dc4bB1C60Cc8fB9272de258E30d1A0ddaa
+VITE_GROUP_POOL_CONTRACT=0x62165331a04afD35Da0aB494481dE9E6503E6DBE
 VITE_STAKING_POOL_CONTRACT=0xEb74C4f01EE73c8151509a7F89e201Acfcd7E2E6
 
 # Start frontend
@@ -365,8 +365,8 @@ npm run dev
 ### 4️⃣ Get Testnet Tokens
 
 ```bash
-# Visit Celo Faucet
-https://faucet.celo.org/alfajores
+# Visit Celo Faucet (use the Celo Sepolia option if available)
+https://faucet.celo.org
 
 # Enter your wallet address
 # Receive testnet CELO & cUSD
@@ -576,7 +576,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 [![Website](https://img.shields.io/badge/Website-loo--pfi.vercel.app-35D07F?style=for-the-badge)](https://loo-pfi.vercel.app)
 [![Backend API](https://img.shields.io/badge/Backend-loop--fi.onrender.com-339933?style=for-the-badge)](https://loop-fi.onrender.com)
 [![GitHub](https://img.shields.io/badge/GitHub-loop--fi-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Juggernaut7/loop-fi)
-[![Celoscan](https://img.shields.io/badge/Celoscan-Contracts-35D07F?style=for-the-badge&logo=celo&logoColor=white)](https://alfajores.celoscan.io/)
+[![Celo Explorer](https://img.shields.io/badge/CeloExplorer-Contracts-35D07F?style=for-the-badge&logo=celo&logoColor=white)](https://explorer.celo.org/)
 
 </div>
 
@@ -589,14 +589,14 @@ Need help? We're here!
 - 📧 **Email:** abdulkabir06000@gmail.com
 - 🌐 **Website:** [loo-pfi.vercel.app](https://loo-pfi.vercel.app)
 - 🔗 **GitHub:** [github.com/Juggernaut7/loop-fi](https://github.com/Juggernaut7/loop-fi)
-- 📊 **Contracts:** [alfajores.celoscan.io](https://alfajores.celoscan.io/)
+- 📊 **Contracts:** Use the Celo Sepolia explorer for contract verification and addresses
 
 ---
 
 ## ⚠️ Disclaimer
 
 **Important:** LoopFi is currently in **TESTNET** phase. Do not use real funds. Always:
-- ✅ Use Alfajores testnet
+- ✅ Use Celo Sepolia testnet
 - ✅ Test with small amounts first
 - ✅ Understand smart contract risks
 - ✅ Do your own research (DYOR)

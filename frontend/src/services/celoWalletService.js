@@ -7,24 +7,25 @@ class CeloWalletService {
     this.address = null;
     this.provider = null;
     this.signer = null;
-    // Default to Sepolia testnet (Ethereum) as requested
-    this.network = 'sepolia';
-    this.listeners = [];
-    this.chainId = 11155111; // Sepolia chain ID
+  // Default to Celo Sepolia (Celo testnet variant) per project requirements
+  this.network = 'celo-sepolia';
+  this.listeners = [];
+  this.chainId = 11142220; // Celo Sepolia chain ID
     this.isConnecting = false; // Prevent multiple simultaneous connections
     
     // Sepolia network configuration
+    // Celo Sepolia network configuration
     this.networkConfig = {
-      chainId: '0xaa36a7', // 11155111 in hex
-      chainName: 'Sepolia Testnet',
+      chainId: ethers.utils.hexValue(this.chainId), // hex-encoded chainId
+      chainName: 'Celo Sepolia Testnet',
       nativeCurrency: {
-        name: 'Ether',
-        symbol: 'ETH',
+        name: 'CELO',
+        symbol: 'CELO',
         decimals: 18,
       },
-      // Public Sepolia RPC; projects may prefer Infura/Alchemy RPCs with API keys
-      rpcUrls: ['https://rpc.sepolia.org', 'https://sepolia.public-rpc.com'],
-      blockExplorerUrls: ['https://sepolia.etherscan.io'],
+  // Default public Celo Sepolia RPC; allow override via Vite env VITE_SEPOLIA_RPC
+  rpcUrls: [import.meta.env.VITE_SEPOLIA_RPC || 'https://rpc.ankr.com/celo_sepolia'],
+      blockExplorerUrls: ['https://explorer.celo.org'],
     };
   }
 
@@ -52,7 +53,7 @@ class CeloWalletService {
       const savedAddress = localStorage.getItem('loopfi_wallet_address');
       const savedNetwork = localStorage.getItem('loopfi_wallet_network');
       
-      if (savedAddress && savedNetwork === 'sepolia') {
+  if (savedAddress && savedNetwork === 'celo-sepolia') {
         console.log('🔄 Found saved wallet connection, checking accounts...');
         try {
           // Check if account is still available without prompting user
@@ -131,7 +132,7 @@ class CeloWalletService {
 
       console.log('🔄 Checking network...');
       
-  // Check and switch to requested network (Sepolia)
+  // Check and switch to requested network (Celo Sepolia)
   await this.switchToNetwork();
       
       // Setup provider and signer

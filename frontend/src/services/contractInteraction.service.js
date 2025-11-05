@@ -86,20 +86,12 @@ class ContractInteractionService {
       );
 
       // Initialize token contracts for approvals
-      const CELO_TOKEN = '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9'; // Alfajores CELO
-      const CUSD_TOKEN = '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1'; // Alfajores cUSD
+      // Read token addresses from Vite env (allows using Sepolia/mocked tokens)
+      const CELO_TOKEN = import.meta.env.VITE_CELO_TOKEN_ADDRESS || '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9';
+      const CUSD_TOKEN = import.meta.env.VITE_CUSD_TOKEN_ADDRESS || '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1';
 
-      this.celoTokenContract = new ethers.Contract(
-        CELO_TOKEN,
-        ERC20_ABI,
-        this.signer
-      );
-
-      this.cusdTokenContract = new ethers.Contract(
-        CUSD_TOKEN,
-        ERC20_ABI,
-        this.signer
-      );
+      this.celoTokenContract = new ethers.Contract(CELO_TOKEN, ERC20_ABI, this.signer);
+      this.cusdTokenContract = new ethers.Contract(CUSD_TOKEN, ERC20_ABI, this.signer);
 
       console.log('✅ Contracts initialized:', {
         savingsGoal: CONTRACT_ADDRESSES.SavingsGoal,

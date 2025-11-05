@@ -37,9 +37,10 @@ module.exports = {
       chainId: 44787,
     },
     sepolia: {
-      url: "https://rpc.ankr.com/celo_sepolia",
+      // Standard Sepolia RPC and chainId
+      url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org",
       accounts: process.env.PRIVATE_KEY ? [`0x${process.env.PRIVATE_KEY}`] : [],
-      chainId: 11142220,
+      chainId: 11155111,
     },
     celo: {
       url: "https://forno.celo.org",

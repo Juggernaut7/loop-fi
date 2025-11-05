@@ -149,8 +149,10 @@ contract SavingsGoal is ReentrancyGuard, Ownable {
         
         // Calculate yield based on APY and time locked
         uint256 timeLocked = block.timestamp - goal.startTime;
-        uint256 yieldRate = (goal.apy * timeLocked) / (365 days * 10000); // Convert basis points to rate
-        goal.yieldEarned = (goal.currentAmount * yieldRate) / 1e18;
+        // yield = principal * apy * timeLocked / (10000 * 365 days)
+        // apy is in basis points (100 basis points = 1%)
+        uint256 yield = (goal.currentAmount * goal.apy * timeLocked) / (10000 * 365 days);
+        goal.yieldEarned = yield;
 
         emit GoalCompleted(msg.sender, goal.currentAmount, goal.yieldEarned);
     }

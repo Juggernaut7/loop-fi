@@ -20,6 +20,29 @@ async function main() {
     // Alfajores Testnet addresses
     CELO_TOKEN_ADDRESS = process.env.CELO_TOKEN_ADDRESS || "0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9";
     CUSD_TOKEN_ADDRESS = process.env.CUSD_TOKEN_ADDRESS || "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
+  } else if (network === "sepolia") {
+    // Sepolia: If token addresses are provided via env, use them; otherwise deploy mock ERC20 tokens for CELO and cUSD
+    CELO_TOKEN_ADDRESS = process.env.CELO_TOKEN_ADDRESS || null;
+    CUSD_TOKEN_ADDRESS = process.env.CUSD_TOKEN_ADDRESS || null;
+    if (!CELO_TOKEN_ADDRESS || !CUSD_TOKEN_ADDRESS) {
+      console.log('🔧 No token addresses provided for Sepolia; will deploy mock ERC20 tokens.');
+      const MockERC20 = await ethers.getContractFactory('MockERC20');
+      const mockCelo = await MockERC20.deploy('Mock CELO', 'mCELO');
+      await mockCelo.deployed();
+      console.log('✅ Mock CELO deployed at:', mockCelo.address);
+
+      const mockCUSD = await MockERC20.deploy('Mock cUSD', 'mcUSD');
+      await mockCUSD.deployed();
+      console.log('✅ Mock cUSD deployed at:', mockCUSD.address);
+
+      // Mint some tokens to the deployer for testing
+      const mintAmount = ethers.utils.parseEther('1000000'); // 1,000,000 tokens
+      await mockCelo.mint(deployer.address, mintAmount);
+      await mockCUSD.mint(deployer.address, mintAmount);
+
+      CELO_TOKEN_ADDRESS = mockCelo.address;
+      CUSD_TOKEN_ADDRESS = mockCUSD.address;
+    }
   } else {
     // Celo Mainnet addresses
     CELO_TOKEN_ADDRESS = process.env.CELO_TOKEN_ADDRESS || "0x471EcE3750Da237f93B8E339c536989b8978a438";

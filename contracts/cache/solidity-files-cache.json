@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\HP\\Desktop\\LoopFi\\contracts\\contracts\\GroupPool.sol": {
-      "lastModificationDate": 1760740716768,
-      "contentHash": "5864484a014d5e7cd945ff3cc6e391bd",
+      "lastModificationDate": 1762379105819,
+      "contentHash": "68aa6f8239e2001ba031efe0fb3d5190",
       "sourceName": "contracts/GroupPool.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -193,7 +193,7 @@
       ]
     },
     "C:\\Users\\HP\\Desktop\\LoopFi\\contracts\\contracts\\LoopFi.sol": {
-      "lastModificationDate": 1760740725806,
+      "lastModificationDate": 1762379016876,
       "contentHash": "be163678239775918181e819872599d8",
       "sourceName": "contracts/LoopFi.sol",
       "solcConfig": {
@@ -237,8 +237,8 @@
       ]
     },
     "C:\\Users\\HP\\Desktop\\LoopFi\\contracts\\contracts\\SavingsGoal.sol": {
-      "lastModificationDate": 1760740644850,
-      "contentHash": "569bf784306790f0b7d1d1b64c77d599",
+      "lastModificationDate": 1762379104674,
+      "contentHash": "c0198569cd7e3c811f853197bd6db62d",
       "sourceName": "contracts/SavingsGoal.sol",
       "solcConfig": {
         "version": "0.8.20",

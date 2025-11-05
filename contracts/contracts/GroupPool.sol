@@ -254,8 +254,9 @@ contract GroupPool is ReentrancyGuard, Ownable {
         
         // Calculate yield based on APY and time locked
         uint256 timeLocked = block.timestamp - pool.startTime;
-        uint256 yieldRate = (pool.apy * timeLocked) / (365 days * 10000); // Convert basis points to rate
-        pool.yieldEarned = (pool.currentAmount * yieldRate) / 1e18;
+        // yield = principal * apy * timeLocked / (10000 * 365 days)
+        uint256 yield = (pool.currentAmount * pool.apy * timeLocked) / (10000 * 365 days);
+        pool.yieldEarned = yield;
 
         emit PoolCompleted(poolId, pool.currentAmount, pool.yieldEarned);
     }

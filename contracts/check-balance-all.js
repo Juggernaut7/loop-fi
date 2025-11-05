@@ -4,7 +4,7 @@ require("dotenv").config();
 async function checkBalance() {
   console.log("🔍 Checking wallet balance on different networks...\n");
   
-  const address = "0xF39cE20c6A905157cF532890ed87b86f422774b7";
+  const address = "0x935fa5da8c080fd8c3129b39052ad654c1f98746";
   console.log("Wallet Address:", address);
   
   // Check Alfajores

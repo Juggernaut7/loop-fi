@@ -6,7 +6,7 @@ class WalletService {
     this.celoService = celoWalletService;
     this.isConnected = false;
     this.address = null;
-    this.network = 'celo-alfajores';
+    this.network = 'sepolia';
     this.listeners = [];
   }
 

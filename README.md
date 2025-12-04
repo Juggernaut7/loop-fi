@@ -133,18 +133,18 @@ LoopFi transforms traditional savings into a **modern, blockchain-powered experi
 
 | Contract | Address | Purpose |
 |----------|---------|---------|
-| **SavingsGoal** | `0xDDe8A1dc4bB1C60Cc8fB9272de258E30d1A0ddaa` | Personal savings goals with 8.5% APY |
-| **GroupPool** | `0x62165331a04afD35Da0aB494481dE9E6503E6DBE` | Group savings pools with 10% APY |
-| **StakingPool** | `0xEb74C4f01EE73c8151509a7F89e201Acfcd7E2E6` | CELO staking with 8.5% APY |
-| **SavingsBadgeNFT** | `0x5088aE782cA3FeC3022c525F8697637b3586Bc81` | Achievement NFT rewards |
-| **LoopFi (Main)** | `0x66cB8258897bc234A9da8b47C92B36C6579e3CE8` | Main contract integrator |
+| **SavingsGoal** | `0x281f607135EF1E2eED1d95a8824c934D0686A5E5` | Personal savings goals with 8.5% APY |
+| **GroupPool** | `0x4E771e4A6e6544e9f076a57638f8c109614B8004` | Group savings pools with 10% APY |
+| **StakingPool** | `0xBceD98Ed90ce98d13cDE17c418Ea82268013fD7E` | CELO staking with 8.5% APY |
+| **SavingsBadgeNFT** | `0xBceD98Ed90ce98d13cDE17c418Ea82268013fD7E` | Achievement NFT rewards |
+| **LoopFi (Main)** | `0x37D4D055F871fF4eDc44eEC44DA23FB8AE267D46` | Main contract integrator |
 
 ### 🪙 **Token Addresses (Celo Sepolia)**
 
 | Token | Address | Description |
 |-------|---------|-------------|
-| **CELO** | `0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9` | Native Celo token (wrapped) |
-| **cUSD** | `0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1` | Celo Dollar stablecoin |
+| **CELO** | `0x46E6CF09b573eD58fB6234Ef6eF8c23CDd1De3f9` | Native Celo token (wrapped) |
+| **cUSD** | `0x5fc31728Cf3f15FC82B0b0D13D5D730a08E452B9` | Celo Dollar stablecoin |
 
 > 🔗 **Verify on Celo Sepolia explorer:** use your preferred Celo explorer for Sepolia (addresses are on the Celo Sepolia testnet)
 

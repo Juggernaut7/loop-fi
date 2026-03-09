@@ -1,841 +1,268 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  TrendingUp, 
-  Target, 
-  Users, 
-  Wallet, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Calendar,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  DollarSign,
-  Banknote,
-  Percent,
-  Trophy,
-  Zap,
-  Star,
-  User,
-  Award,
-  Loader,
-  Bell,
-  Brain, 
-  MessageCircle, 
-  Lightbulb, 
-  Sparkles,
-  Heart,
-  Gamepad2,
-  PiggyBank,
-  Building2,
-  CreditCard,
-  PieChart,
-  TrendingDown,
-  UserPlus,
-  Share2,
-  Gift,
-  BookOpen
-} from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import StatsCard from '../components/ui/StatsCard';
-import ProgressRing from '../components/ui/ProgressRing';
-import FloatingActionButton from '../components/ui/FloatingActionButton';
-import WeatherWidget from '../components/ui/WeatherWidget';
+import { Lock, Unlock, Plus, DollarSign, Clock, Users, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import LoopFundCard from '../components/ui/LoopFundCard';
-import dashboardService from '../services/dashboardService';
-import { useToast } from '../context/ToastContext';
-import QuickActions from '../components/dashboard/QuickActions';
-import FinancialAdvisor from '../components/ai/FinancialAdvisor';
-import AIFinancialAdvisor from '../components/ai/AIFinancialAdvisor';
-import { formatCurrencySimple } from '../utils/currency';
-// Removed old Web2 wallet imports - using Web3 wallet now
+import LoopFundButton from '../components/ui/LoopFundButton';
 import WalletConnect from '../components/web3/WalletConnect';
 import walletService from '../services/walletService';
 import { useWallet } from '../hooks/useWallet';
 
 const DashboardPage = () => {
-  const [selectedGoal, setSelectedGoal] = useState(null);
-  const [dashboardData, setDashboardData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  // Removed modal states - Web3 doesn't need these
-  const [error, setError] = useState(null);
-  const [realAchievements, setRealAchievements] = useState([]);
-  const [achievementsLoading, setAchievementsLoading] = useState(true);
-  const { toast } = useToast();
   const navigate = useNavigate();
-  
-  // Get real wallet data from useWallet hook
-  const { isConnected: isWalletConnected, address, balance, cusdBalance, loadBalances } = useWallet();
+  const { isConnected, address, balance } = useWallet();
+  const [vaults, setVaults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Web3 wallet handlers - no backend API calls needed
-  const handleAddMoney = () => {
-    // For Web3, this would open a wallet transfer interface
-    toast.info('Use your wallet to deposit CELO/cUSD directly');
-  };
+  // Format SOL balance
+  const formattedBalance = balance ? parseFloat(balance).toFixed(2) : '0.00';
 
-  const handleViewTransactions = () => {
-    // For Web3, this would open the blockchain explorer
-    const connectionStatus = walletService.getConnectionStatus();
-    if (connectionStatus.isConnected) {
-      window.open(`https://explorer.celo.org/address/${connectionStatus.address}`, '_blank');
-    }
-  };
-
-  const handleWithdraw = () => {
-    // For Web3, this would open a wallet transfer interface
-    toast.info('Use your wallet to withdraw CELO/cUSD directly');
-  };
-
-  // Initialize dashboard data with wallet info (no backend calls needed)
+  // Mock vaults data - will be replaced with Solana program calls
   useEffect(() => {
-    if (!isWalletConnected || !address) {
-      setIsLoading(false);
-      setDashboardData(null);
-      return;
-    }
-
-    // Set dashboard data from wallet info
-    setDashboardData({
-      wallet: {
-        address: address,
-        balance: balance || 0,
-        network: 'celo-alfajores',
-        totalDeposited: 0,
-        totalYieldEarned: 0
-      },
-      stats: {
-        activeVaults: 0,
-        completedVaults: 0,
-        totalVaults: 0,
-        groupVaults: 0,
-        averageAPY: 8.5,
-        portfolioHealth: 0
-      },
-      vaults: {
-        individual: [],
-        group: []
-      },
-      recentActivity: [],
-      insights: {
-        totalProgress: 0,
-        estimatedMonthlyYield: 0,
-        nextMilestone: null
-      }
-    });
-    setIsLoading(false);
-  }, [isWalletConnected, address, balance]);
-
-  // Use mock Web3 achievements instead of fetching Web2 data
-  useEffect(() => {
-    if (isWalletConnected) {
-      // Mock Web3 achievements for hackathon
-      const mockWeb3Achievements = [
+    if (isConnected && address) {
+      // TODO: Fetch vaults from Solana program
+      setVaults([
         {
-          id: 1,
-          title: 'First Vault',
-          description: 'Created your first smart contract vault',
-          icon: Target,
-          color: 'bg-loopfund-emerald-500',
-          type: 'individual'
+          id: 'vault-1',
+          name: 'Emergency Fund',
+          type: 'solo',
+          balance: 5.5,
+          unlockTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          isUnlocked: false,
+          description: '30 days until unlock'
         },
         {
-          id: 2,
-          title: 'Yield Farmer',
-          description: 'Earned your first DeFi yield',
-          icon: TrendingUp,
-          color: 'bg-loopfund-coral-500',
-          type: 'individual'
-        },
-        {
-          id: 3,
-          title: 'Group Vault Master',
-          description: 'Created a successful group vault',
-          icon: Users,
-          color: 'bg-loopfund-gold-500',
-          type: 'group'
-        },
-        {
-          id: 4,
-          title: 'DeFi Expert',
-          description: 'Reached 10% APY on your vaults',
-          icon: Award,
-          color: 'bg-loopfund-electric-500',
-          type: 'both'
+          id: 'vault-2',
+          name: 'Vacation Fund',
+          type: 'group',
+          balance: 12.25,
+          unlockTime: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+          isUnlocked: false,
+          members: 3,
+          description: '60 days until unlock'
         }
-      ];
-      
-      setRealAchievements(mockWeb3Achievements);
-      setAchievementsLoading(false);
-    } else {
-        setAchievementsLoading(false);
-      }
-  }, [isWalletConnected]);
+      ]);
+      setIsLoading(false);
+    }
+  }, [isConnected, address]);
 
-  // No need for separate wallet connection check - using useWallet hook
+  const calculateDaysRemaining = (unlockTime) => {
+    const now = new Date();
+    const diff = unlockTime - now;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  };
 
-  // Show loading state
-  if (isLoading) {
+  const calculateProgress = (unlockTime) => {
+    const totalDays = 30; // Placeholder
+    const daysRemaining = calculateDaysRemaining(unlockTime);
+    return Math.max(0, ((totalDays - daysRemaining) / totalDays) * 100);
+  };
+
+  if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-loopfund-neutral-100 via-loopfund-neutral-50 to-loopfund-emerald-50/30 dark:from-loopfund-midnight-900 dark:via-loopfund-midnight-800 dark:to-loopfund-midnight-900 flex items-center justify-center">
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 bg-gradient-to-br from-loopfund-emerald-500 to-loopfund-mint-500 rounded-full flex items-center justify-center mx-auto mb-6"
-          >
-            <Sparkles className="w-8 h-8 text-white" />
-          </motion.div>
-          <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Loading your revolutionary dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-loopfund-neutral-100 via-loopfund-neutral-50 to-loopfund-coral-50/30 dark:from-loopfund-midnight-900 dark:via-loopfund-midnight-800 dark:to-loopfund-midnight-900 flex items-center justify-center">
-        <div className="text-center">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="w-16 h-16 bg-gradient-to-br from-loopfund-coral-500 to-loopfund-orange-500 rounded-full flex items-center justify-center mx-auto mb-6"
-          >
-            <AlertCircle className="w-8 h-8 text-white" />
-          </motion.div>
-          <p className="font-body text-body-lg text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-6">Failed to load dashboard</p>
-          <motion.button 
-            onClick={() => window.location.reload()} 
-            className="bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 hover:from-loopfund-emerald-600 hover:to-loopfund-mint-600 text-white px-6 py-3 rounded-xl font-body text-body font-medium transition-all duration-300 shadow-lg hover:shadow-xl"
-            whileTap={{ scale: 0.95 }}
-          >
-            Try Again
-          </motion.button>
-        </div>
-      </div>
-    );
-  }
-
-  // Web3 wallet stats - use REAL wallet balance with user-friendly language
-  const stats = isWalletConnected ? [
-    {
-      title: 'My Wallet Balance',
-      value: `${balance?.toFixed(4) || 0} CELO`,
-      change: cusdBalance > 0 ? `+ ${cusdBalance?.toFixed(2) || 0} cUSD` : 'Available to use',
-      changeType: 'positive',
-      icon: Wallet,
-      color: 'loopfund-emerald',
-      gradient: 'from-loopfund-emerald-500 to-loopfund-mint-500'
-    },
-    {
-      title: 'Total Earnings',
-      value: `${dashboardData?.wallet?.totalYieldEarned?.toFixed(3) || 0} CELO`,
-      change: `Est. this month: ${dashboardData?.insights?.estimatedMonthlyYield || 0} CELO`,
-      changeType: 'positive',
-      icon: TrendingUp,
-      color: 'loopfund-coral',
-      gradient: 'from-loopfund-coral-500 to-loopfund-orange-500'
-    },
-    {
-      title: 'Savings Goals',
-      value: `${dashboardData?.stats?.activeVaults || 0}`,
-      change: `${dashboardData?.stats?.groupVaults || 0} with friends`,
-      changeType: 'positive',
-      icon: Target,
-      color: 'loopfund-gold',
-      gradient: 'from-loopfund-gold-500 to-loopfund-electric-500'
-    },
-    {
-      title: 'Yearly Growth',
-      value: `${dashboardData?.stats?.averageAPY?.toFixed(1) || 8.5}%`,
-      change: `Your money is growing`,
-      changeType: 'positive',
-      icon: Percent,
-      color: 'loopfund-electric',
-      gradient: 'from-loopfund-electric-500 to-loopfund-lavender-500'
-    }
-  ] : [];
-
-  // Use real vaults data from API
-  const recentGoals = (isWalletConnected && dashboardData?.vaults?.individual) 
-    ? dashboardData.vaults.individual.map(vault => ({
-        _id: vault.id,
-        id: vault.id,
-        name: vault.name,
-        currentAmount: vault.currentAmount || 0,
-        targetAmount: vault.targetAmount || 0,
-        isGroupGoal: false,
-        category: vault.category || 'General'
-      }))
-    : [];
-
-  // Use real activity data from API
-  const recentActivity = (isWalletConnected && dashboardData?.recentActivity) 
-    ? dashboardData.recentActivity.map(activity => ({
-        id: activity.id,
-        type: activity.type,
-        title: activity.title,
-        description: activity.description,
-        amount: activity.amount,
-        date: new Date(activity.date).toLocaleDateString(),
-        icon: activity.icon === 'Target' ? Target : activity.icon === 'TrendingUp' ? TrendingUp : Users,
-        color: activity.type === 'vault_created' ? 'text-loopfund-emerald-500' : 'text-loopfund-coral-500',
-        status: activity.status || 'success'
-      }))
-    : [];
-
-  // Mock Web3 upcoming payments data will be defined later
-
-  // Use Web3 achievements only
-  const achievements = realAchievements;
-
-  // Upcoming payments - calculated from vaults
-  const upcomingPayments = (isWalletConnected && dashboardData?.vaults?.individual) 
-    ? dashboardData.vaults.individual
-        .filter(vault => vault.targetAmount > vault.currentAmount)
-        .slice(0, 2)
-        .map((vault, index) => ({
-          id: vault.id,
-          title: `${vault.name} Contribution`,
-          amount: Math.min(0.5, vault.targetAmount - vault.currentAmount),
-          date: new Date(Date.now() + ((index + 1) * 7 * 24 * 60 * 60 * 1000))
-        }))
-    : [];
-
-  // Sort recent activity by date (newest first)
-  const sortedRecentActivity = recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'success':
-      case 'completed':
-        return 'text-loopfund-emerald-600 bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/20';
-      case 'warning':
-        return 'text-loopfund-gold-600 bg-loopfund-gold-100 dark:bg-loopfund-gold-900/20';
-      case 'info':
-        return 'text-loopfund-electric-600 bg-loopfund-electric-100 dark:bg-loopfund-electric-900/20';
-      default:
-        return 'text-loopfund-neutral-600 bg-loopfund-neutral-100 dark:bg-loopfund-neutral-900/20';
-    }
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'success':
-      case 'completed':
-        return <CheckCircle size={16} />;
-      case 'warning':
-        return <AlertCircle size={16} />;
-      case 'info':
-        return <Clock size={16} />;
-      default:
-        return <Clock size={16} />;
-    }
-  };
-
-  const getCategoryColor = (category) => {
-    switch (category) {
-      case 'travel':
-        return 'bg-loopfund-emerald-500';
-      case 'technology':
-        return 'bg-loopfund-electric-500';
-      case 'emergency':
-        return 'bg-loopfund-coral-500';
-      default:
-        return 'bg-loopfund-neutral-500';
-    }
-  };
-
-  // Dashboard content - wallet connection is handled by AppLayout
-
-  return (
-    <div className="space-y-4 sm:space-y-6 md:space-y-8">
-        {/* Welcome Section with Weather */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-3"
-          >
-            <LoopFundCard className="p-4 sm:p-6 md:p-8">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3 sm:space-x-4">
-                  <div className="p-2 sm:p-3 md:p-4 bg-loopfund-emerald-100 rounded-full flex-shrink-0">
-                    <User className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-loopfund-emerald-600" />
-                  </div>
-                  <div>
-                    <h1 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-loopfund-neutral-900 mb-1 sm:mb-2">
-                      Welcome back! 👋
-                    </h1>
-                    <p className="font-body text-xs sm:text-sm md:text-base text-loopfund-neutral-600">
-                      Your wallet is connected. Start saving and growing your money with automated savings goals and personalized advice.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </LoopFundCard>
-          </motion.div>
-          
-          <WeatherWidget />
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-8">
-          {stats.map((stat, index) => (
-            <StatsCard
-              key={index}
-              title={stat.title}
-              value={stat.value}
-              change={stat.change}
-              changeType={stat.changeType}
-              icon={stat.icon}
-              color={stat.color}
-              gradient={stat.gradient}
-              delay={index * 0.1}
-            />
-          ))}
-        </div>
-
-
-        {/* Quick Actions */}
-        <QuickActions />
-
-        {/* Savings Options Section */}
-        <div className="mb-4 sm:mb-6 md:mb-8">
-          <motion.div 
-            className="bg-gradient-to-r from-loopfund-emerald-50 to-loopfund-coral-50 dark:from-loopfund-emerald-900/20 dark:to-loopfund-coral-900/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-              <div>
-                <h3 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-1 sm:mb-2">
-                  💰 Your Savings Options
-                </h3>
-                <p className="text-xs sm:text-sm md:text-base text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
-                  Grow your money safely with automated savings accounts
-                </p>
-              </div>
-              <Link
-                to="/goals"
-                className="inline-flex items-center px-3 sm:px-4 py-2 sm:py-2.5 bg-loopfund-emerald-600 hover:bg-loopfund-emerald-700 text-white rounded-lg transition-colors duration-200 text-xs sm:text-sm font-medium w-full sm:w-auto justify-center min-h-[44px]"
-              >
-                <Target className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Create Savings Goal</span>
-                <span className="sm:hidden">Create Goal</span>
-                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2" />
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-              <div className="bg-white dark:bg-loopfund-dark-surface rounded-lg p-3 sm:p-4 border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-1.5 sm:p-2 bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/30 rounded-lg flex-shrink-0">
-                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-loopfund-emerald-600 dark:text-loopfund-emerald-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm sm:text-base text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      CELO Savings
-                    </p>
-                    <p className="text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
-                      8.5% yearly returns • Safe
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-loopfund-dark-surface rounded-lg p-3 sm:p-4 border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-1.5 sm:p-2 bg-loopfund-coral-100 dark:bg-loopfund-coral-900/30 rounded-lg flex-shrink-0">
-                    <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-loopfund-coral-600 dark:text-loopfund-coral-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm sm:text-base text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      Boosted Returns
-                    </p>
-                    <p className="text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
-                      12.3% yearly returns • Balanced
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-loopfund-dark-surface rounded-lg p-3 sm:p-4 border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-1.5 sm:p-2 bg-loopfund-gold-100 dark:bg-loopfund-gold-900/30 rounded-lg flex-shrink-0">
-                    <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-loopfund-gold-600 dark:text-loopfund-gold-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm sm:text-base text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      Smart Recommendations
-                    </p>
-                    <p className="text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
-                      Personalized savings advice
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {/* Recent Goals */}
-          <div className="lg:col-span-2">
-            <motion.div 
-              className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
-                <h3 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                  My Savings Goals
-                </h3>
-                <Link
-                  to="/goals"
-                  className="text-loopfund-emerald-600 dark:text-loopfund-emerald-400 font-body text-xs sm:text-sm font-medium transition-colors min-h-[44px] flex items-center"
-                >
-                  View All
-                </Link>
-              </div>
-              <div className="space-y-3 sm:space-y-4">
-                {recentGoals.map((goal, index) => (
-                  <motion.div
-                    key={goal._id || goal.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 md:p-6 rounded-xl bg-loopfund-neutral-50 dark:bg-loopfund-midnight-800/50 transition-all duration-300 group gap-3 sm:gap-4"
-                  >
-                    <div className="flex items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
-                      <motion.div 
-                        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${
-                          goal.isGroupGoal ? 'bg-loopfund-coral-500' : 'bg-loopfund-emerald-500'
-                        } flex items-center justify-center shadow-lg flex-shrink-0`}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      >
-                        <Target className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                      </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-body text-sm sm:text-base md:text-lg font-medium text-loopfund-neutral-900 dark:text-loopfund-dark-text truncate">
-                          {goal.name}
-                        </h4>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
-                            goal.isGroupGoal 
-                              ? 'bg-loopfund-coral-100 text-loopfund-coral-700 dark:bg-loopfund-coral-900/30 dark:text-loopfund-coral-300' 
-                              : 'bg-loopfund-emerald-100 text-loopfund-emerald-700 dark:bg-loopfund-emerald-900/30 dark:text-loopfund-emerald-300'
-                          }`}>
-                            {goal.isGroupGoal ? 'Group' : 'Individual'}
-                          </span>
-                          <span className="font-body text-xs text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-                            {goal.category || 'Personal'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-left sm:text-right w-full sm:w-auto">
-                      <div className="font-body text-sm sm:text-base md:text-lg font-medium text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                        {formatCurrencySimple(goal.currentAmount || 0)} / {formatCurrencySimple(goal.targetAmount || 0)}
-                      </div>
-                      <div className="w-full sm:w-24 md:w-32 h-2 sm:h-3 bg-loopfund-neutral-200 dark:bg-loopfund-neutral-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
-                        <motion.div
-                          className={`h-2 sm:h-3 rounded-full ${
-                            goal.isGroupGoal ? 'bg-loopfund-coral-500' : 'bg-loopfund-emerald-500'
-                          }`}
-                          initial={{ width: 0 }}
-                          animate={{ 
-                            width: `${goal.targetAmount > 0 ? ((goal.currentAmount || 0) / goal.targetAmount) * 100 : 0}%` 
-                          }}
-                          transition={{ delay: 0.5 + index * 0.1, duration: 1, ease: "easeOut" }}
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Recent Activity */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30"
-          >
-            <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
-              <h2 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                Recent Activity
-              </h2>
-              <button className="font-body text-xs sm:text-sm text-loopfund-emerald-600 dark:text-loopfund-emerald-400 font-medium transition-colors min-h-[44px] flex items-center">
-                View all
-              </button>
-            </div>
-            <div className="space-y-2 sm:space-y-3 md:space-y-4">
-              {sortedRecentActivity.map((activity, index) => (
-                <motion.div 
-                  key={activity.id} 
-                  className="flex items-start space-x-2 sm:space-x-3 md:space-x-4 p-2 sm:p-3 rounded-xl transition-all duration-300 group"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                  whileHover={{ x: 5 }}
-                >
-                  <motion.div 
-                    className={`p-2 sm:p-2.5 md:p-3 rounded-xl ${getStatusColor(activity.status)} flex-shrink-0`}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  >
-                    {getStatusIcon(activity.status)}
-                  </motion.div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-body text-xs sm:text-sm font-medium text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      {activity.title}
-                    </p>
-                    <div className="flex items-center justify-between mt-1 gap-2">
-                      <p className="font-body text-xs text-loopfund-neutral-500 dark:text-loopfund-neutral-400 truncate">
-                        {activity.date}
-                      </p>
-                      {activity.amount && (
-                        <p className="font-body text-xs font-medium text-loopfund-neutral-900 dark:text-loopfund-dark-text flex-shrink-0">
-                          ${activity.amount}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Bottom Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          {/* Upcoming Payments */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30"
-          >
-            <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
-              <h2 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                Upcoming Payments
-              </h2>
-              <button className="font-body text-xs sm:text-sm text-loopfund-emerald-600 dark:text-loopfund-emerald-400 font-medium transition-colors min-h-[44px] flex items-center">
-                View calendar
-              </button>
-            </div>
-            <div className="space-y-3 sm:space-y-4">
-              {upcomingPayments.map((payment, index) => (
-                <motion.div
-                  key={payment.id}
-                  className="p-3 sm:p-4 md:p-6 border border-loopfund-neutral-200 dark:border-loopfund-neutral-600/30 rounded-xl transition-all duration-300 group"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 sm:mb-3 gap-2">
-                    <h3 className="font-body text-sm sm:text-base md:text-lg font-medium text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      {payment.title}
-                    </h3>
-                    <span className="font-body text-xs sm:text-sm text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-                      {new Date(payment.date).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-base sm:text-lg md:text-xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                      {formatCurrencySimple(payment.amount)}
-                    </span>
-                    <span className="px-2 sm:px-3 py-0.5 sm:py-1 text-xs font-medium text-loopfund-coral-700 bg-loopfund-coral-100 dark:bg-loopfund-coral-900/20 dark:text-loopfund-coral-300 rounded-full">
-                      Due Soon
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Achievements */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30"
-          >
-            <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
-              <h2 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                Achievements
-              </h2>
-              <Link
-                to="/achievements"
-                className="font-body text-xs sm:text-sm text-loopfund-emerald-600 dark:text-loopfund-emerald-400 hover:text-loopfund-emerald-700 dark:hover:text-loopfund-emerald-300 font-medium transition-colors min-h-[44px] flex items-center"
-              >
-                View all
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {achievementsLoading ? (
-                <div className="col-span-2 flex items-center justify-center py-8">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className="w-8 h-8 bg-gradient-to-br from-loopfund-emerald-500 to-loopfund-mint-500 rounded-full flex items-center justify-center mr-3"
-                  >
-                    <Sparkles className="w-4 h-4 text-white" />
-                  </motion.div>
-                  <span className="font-body text-body-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Loading achievements...</span>
-                </div>
-              ) : realAchievements.length > 0 ? (
-                realAchievements.map((achievementData, index) => {
-                  const { achievement, progress, unlocked } = achievementData;
-                  if (!achievement) return null;
-                  
-                  return (
-                    <motion.div
-                      key={achievement._id || `achievement-${index}`}
-                      className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                        unlocked 
-                          ? 'border-loopfund-emerald-200 bg-loopfund-emerald-50 dark:bg-loopfund-emerald-900/20 dark:border-loopfund-emerald-800' 
-                          : 'border-loopfund-neutral-200 bg-loopfund-neutral-50 dark:bg-loopfund-midnight-800/50 dark:border-loopfund-neutral-600/30'
-                      }`}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.6 + index * 0.1 }}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <motion.div 
-                          className={`p-2 rounded-lg ${
-                            unlocked 
-                              ? 'bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/40' 
-                              : 'bg-loopfund-neutral-100 dark:bg-loopfund-midnight-900/40'
-                          }`}
-                          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        >
-                          <span className="text-lg">{achievement.icon}</span>
-                        </motion.div>
-                        <div>
-                          <p className={`font-body text-body-sm font-medium ${
-                            unlocked ? 'text-loopfund-emerald-800 dark:text-loopfund-emerald-200' : 'text-loopfund-neutral-500 dark:text-loopfund-neutral-400'
-                          }`}>
-                            {achievement.name}
-                          </p>
-                          <p className="font-body text-body-xs text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-                            {achievement.description}
-                          </p>
-                          {unlocked && (
-                            <div className="flex items-center mt-1">
-                              <CheckCircle className="w-3 h-3 text-loopfund-emerald-500 mr-1" />
-                              <span className="font-body text-body-xs text-loopfund-emerald-600 dark:text-loopfund-emerald-400">Unlocked</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })
-              ) : (
-                achievements.map((achievement, index) => (
-                  <motion.div
-                    key={achievement.id}
-                    className="p-4 rounded-xl border-2 border-loopfund-emerald-200 bg-loopfund-emerald-50 dark:bg-loopfund-emerald-900/20 dark:border-loopfund-emerald-800 transition-all duration-300"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <motion.div 
-                        className="p-2 rounded-lg bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/40"
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      >
-                        <achievement.icon 
-                          size={20} 
-                          className="text-loopfund-emerald-600 dark:text-loopfund-emerald-400" 
-                        />
-                      </motion.div>
-                      <div>
-                        <p className="font-body text-body-sm font-medium text-loopfund-emerald-800 dark:text-loopfund-emerald-200">
-                          {achievement.title}
-                        </p>
-                        <p className="font-body text-body-xs text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-                          {achievement.description}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))
-              )}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Overall Progress Ring */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30 text-center"
-        >
-          <h2 className="font-display text-lg sm:text-xl md:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4 sm:mb-6">
-            Overall Progress
-          </h2>
-          <div className="flex justify-center">
-            <ProgressRing 
-              progress={dashboardData?.stats?.completionRate ? Math.round(dashboardData.stats.completionRate) : 0} 
-              size={window.innerWidth < 640 ? 120 : 150} 
-              strokeWidth={window.innerWidth < 640 ? 10 : 12} 
-              color="#10B981" 
-            />
-          </div>
-          <p className="font-body text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mt-4 sm:mt-6">
-            You're {dashboardData?.stats?.completionRate ? Math.round(dashboardData.stats.completionRate) : 0}% of the way to reaching all your savings goals! Keep it up! 🎉
-          </p>
-        </motion.div>
-
-        {/* AI Financial Advisor Section */}
+      <div className="w-full max-w-2xl mx-auto p-4 sm:p-6 min-h-screen">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="mb-4 sm:mb-6 md:mb-8"
+          transition={{ duration: 0.5 }}
         >
-          <div className="bg-white dark:bg-loopfund-dark-surface rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-loopfund border border-loopfund-neutral-200/20 dark:border-loopfund-neutral-600/30">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 md:mb-8 gap-3 sm:gap-4">
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <motion.div 
-                  className="p-2 sm:p-2.5 md:p-3 bg-loopfund-electric-500 rounded-xl shadow-lg flex-shrink-0"
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </motion.div>
-                <h2 className="font-display text-base sm:text-lg md:text-xl lg:text-2xl text-loopfund-neutral-900 dark:text-loopfund-dark-text">
-                  Your Personal Savings Coach
-                </h2>
-              </div>
-              <Link 
-                to="/ai-advisor" 
-                className="font-body text-xs sm:text-sm text-loopfund-emerald-600 dark:text-loopfund-emerald-400 hover:text-loopfund-emerald-700 dark:hover:text-loopfund-emerald-300 font-medium transition-colors min-h-[44px] flex items-center"
-              >
-                View Full Page →
-              </Link>
-            </div>
-            <p className="font-body text-xs sm:text-sm md:text-base text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-4 sm:mb-6">
-              Get personalized tips and helpful strategies to save smarter and reach your goals faster.
-            </p>
-            <AIFinancialAdvisor />
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-2">
+            Connect Wallet
+          </h1>
+          <p className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-8">
+            Connect your Solana wallet to start creating secure vaults
+          </p>
+          <WalletConnect />
         </motion.div>
+      </div>
+    );
+  }
 
-      {/* Floating Action Button */}
-      <FloatingActionButton />
+  return (
+    <div className="w-full max-w-2xl mx-auto p-4 sm:p-6 space-y-6 pb-32">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-4"
+      >
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+              Your Vaults
+            </h1>
+            <p className="text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mt-1">
+              {walletService.formatAddress(address)}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Total Balance</p>
+            <p className="text-2xl sm:text-3xl font-bold text-loopfund-emerald-600 dark:text-loopfund-emerald-400">
+              {formattedBalance} SOL
+            </p>
+          </div>
+        </div>
+      </motion.div>
 
-        {/* Web3 doesn't need these modals - wallet handles transfers directly */}
+      {/* Create New Vault Button */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+      >
+        <LoopFundButton
+          variant="primary"
+          size="lg"
+          onClick={() => navigate('/app/goals')}
+          className="w-full"
+        >
+          <Plus className="w-5 h-5 mr-2" />
+          Create New Vault
+        </LoopFundButton>
+      </motion.div>
+
+      {/* Vaults List */}
+      <div className="space-y-4">
+        {vaults.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <LoopFundCard className="p-8 text-center border-2 border-dashed border-loopfund-neutral-300 dark:border-loopfund-neutral-600">
+              <Lock className="w-12 h-12 text-loopfund-neutral-400 dark:text-loopfund-neutral-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-loopfund-neutral-700 dark:text-loopfund-neutral-300 mb-2">
+                No Vaults Yet
+              </h3>
+              <p className="text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+                Create your first vault to start securing your savings
+              </p>
+            </LoopFundCard>
+          </motion.div>
+        ) : (
+          vaults.map((vault, index) => (
+            <motion.div
+              key={vault.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              onClick={() => navigate(`/app/vaults/${vault.id}`)}
+              className="cursor-pointer"
+            >
+              <LoopFundCard className="p-4 sm:p-6 hover:shadow-lg transition-shadow duration-200">
+                <div className="space-y-4">
+                  {/* Vault Header */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <h3 className="text-lg sm:text-xl font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+                          {vault.name}
+                        </h3>
+                        {vault.isUnlocked ? (
+                          <Unlock className="w-4 h-4 sm:w-5 sm:h-5 text-loopfund-emerald-500" />
+                        ) : (
+                          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-loopfund-coral-500" />
+                        )}
+                      </div>
+                      <p className="text-xs sm:text-sm text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+                        {vault.type === 'solo' ? 'Solo Vault' : `Group Vault • ${vault.members} members`}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg sm:text-xl font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+                        {vault.balance.toFixed(2)}
+                      </p>
+                      <p className="text-xs text-loopfund-neutral-600 dark:text-loopfund-neutral-400">SOL</p>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar and Time */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400">
+                        <Clock className="w-4 h-4 inline mr-1" />
+                        {calculateDaysRemaining(vault.unlockTime)} days remaining
+                      </span>
+                      {vault.isUnlocked && (
+                        <span className="text-loopfund-emerald-600 dark:text-loopfund-emerald-400 font-semibold">
+                          UNLOCKED
+                        </span>
+                      )}
+                    </div>
+                    {!vault.isUnlocked && (
+                      <div className="w-full bg-loopfund-neutral-200 dark:bg-loopfund-neutral-700 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-loopfund-emerald-500 to-loopfund-mint-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${calculateProgress(vault.unlockTime)}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-2">
+                    {!vault.isUnlocked && (
+                      <button className="flex-1 bg-loopfund-neutral-100 dark:bg-loopfund-neutral-800 text-loopfund-neutral-700 dark:text-loopfund-neutral-300 py-2 px-3 rounded-lg font-medium text-sm transition-all">
+                        <DollarSign className="w-4 h-4 inline mr-1" />
+                        Deposit
+                      </button>
+                    )}
+                    {vault.isUnlocked && (
+                      <button className="flex-1 bg-loopfund-emerald-100 dark:bg-loopfund-emerald-900/40 text-loopfund-emerald-700 dark:text-loopfund-emerald-400 py-2 px-3 rounded-lg font-medium text-sm transition-all">
+                        <Unlock className="w-4 h-4 inline mr-1" />
+                        Withdraw
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </LoopFundCard>
+            </motion.div>
+          ))
+        )}
+      </div>
+
+      {/* Quick Stats */}
+      {vaults.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-2 gap-4"
+        >
+          <LoopFundCard className="p-4 text-center">
+            <Lock className="w-6 h-6 text-loopfund-coral-500 mx-auto mb-2" />
+            <p className="text-xs text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Locked</p>
+            <p className="text-lg font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+              {vaults.filter(v => !v.isUnlocked).length}
+            </p>
+          </LoopFundCard>
+          <LoopFundCard className="p-4 text-center">
+            <Unlock className="w-6 h-6 text-loopfund-emerald-500 mx-auto mb-2" />
+            <p className="text-xs text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Ready</p>
+            <p className="text-lg font-bold text-loopfund-neutral-900 dark:text-loopfund-dark-text">
+              {vaults.filter(v => v.isUnlocked).length}
+            </p>
+          </LoopFundCard>
+        </motion.div>
+      )}
+
+      {/* Info Card */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <LoopFundCard className="p-4 bg-loopfund-neutral-50 dark:bg-loopfund-neutral-800/50 border border-loopfund-neutral-200 dark:border-loopfund-neutral-700">
+          <div className="flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-loopfund-neutral-600 dark:text-loopfund-neutral-400 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-loopfund-neutral-700 dark:text-loopfund-neutral-300">
+              <p className="font-semibold mb-1">How it works</p>
+              <p className="text-xs">Create a vault, lock your SOL, and set an unlock date. Your funds are secured on the Solana blockchain.</p>
+            </div>
+          </div>
+        </LoopFundCard>
+      </motion.div>
     </div>
   );
 };

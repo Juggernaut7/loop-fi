@@ -99,37 +99,6 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0, isMobileOpen, cl
       description: 'Create and manage savings goals'
     },
     {
-      title: 'Earn',
-      icon: TrendingUp,
-      path: '/app/earn',
-      badge: null,
-      description: 'Earn yield on your savings'
-    },
-    {
-      title: 'AI Advisor',
-      icon: Brain,
-      path: '/app/ai-advisor',
-      badge: 'Soon',
-      description: 'AI-powered financial advice',
-      comingSoon: true
-    },
-    {
-      title: 'NFTs',
-      icon: Award,
-      path: '/app/nft',
-      badge: 'Soon',
-      description: 'Achievement NFTs',
-      comingSoon: true
-    },
-    {
-      title: 'Leaderboard',
-      icon: Trophy,
-      path: '/app/leaderboard',
-      badge: 'Soon',
-      description: 'Community rankings',
-      comingSoon: true
-    },
-    {
       title: 'Notifications',
       icon: Bell,
       path: '/app/notifications',
@@ -141,7 +110,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, unreadCount = 0, isMobileOpen, cl
       icon: Wallet,
       path: '/app/wallet',
       badge: null,
-      description: 'Manage your Celo wallet'
+      description: 'View your Solana wallet'
     },
     {
       title: 'Settings',

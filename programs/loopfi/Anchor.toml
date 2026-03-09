@@ -1,0 +1,15 @@
+[toolchain]
+anchor_version = "0.28.0"
+
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/id.json"
+
+[programs.devnet]
+loopfi = "GLF8TRSdvNNjNB4z6TGaYHjNQngDTyJmAPiLn3b7TYq"
+
+[registry]
+url = "https://api.github.com/repos/coral-xyz/anchor"
+
+[build]
+shell = "bash"

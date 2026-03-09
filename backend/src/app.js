@@ -11,11 +11,8 @@ const { notFound } = require('./middleware/notFound');
 const healthRoutes = require('./routes/health.route');
 const groupRoutes = require('./routes/groups.route');
 const goalRoutes = require('./routes/goals.route');
-const stakingRoutes = require('./routes/staking.route');
-// Removed deleted routes: contributions, admin, test, achievements, analytics
 const { env } = require('./config/env');
 const notificationRoutes = require('./routes/notifications.route');
-// Removed deleted routes: transactions, enhancedCommunity, community, emailVerification
 
 const app = express();
 
@@ -56,19 +53,12 @@ app.use('/api/', rateLimit({ windowMs: 60 * 1000, max: 120 }));
 
 // Routes
 app.use('/api/health', healthRoutes);
-// Web2 auth routes removed - using Web3 wallet authentication
 app.use('/api/groups', groupRoutes);
 app.use('/api/goals', goalRoutes);
-app.use('/api/staking', stakingRoutes);
-// Removed deleted route registrations
 app.use('/api/notifications', notificationRoutes);
-// Removed deleted route registrations
 
 // Dashboard routes
 app.use('/api/dashboard', require('./routes/dashboard.route'));
-
-// AI routes
-app.use('/api/ai', require('./routes/ai.route'));
 
 // Swagger docs
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

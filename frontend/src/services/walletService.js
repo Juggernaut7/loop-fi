@@ -1,31 +1,60 @@
-// Wallet Service - Wrapper for Celo wallet integration
-import celoWalletService from './celoWalletService';
+// Wallet Service - Solana wallet integration
+import { PublicKey, Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-class WalletService {
+const SOLANA_NETWORK = 'https://api.devnet.solana.com';
+const SUPPORTED_WALLETS = ['phantom', 'backpack', 'solflare'];
+
+class SolanaWalletService {
   constructor() {
-    this.celoService = celoWalletService;
     this.isConnected = false;
     this.address = null;
-  this.network = 'celo-sepolia';
+    this.network = 'devnet';
+    this.connection = new Connection(SOLANA_NETWORK, 'confirmed');
     this.listeners = [];
+    this.provider = null;
+  }
+
+  // Get Solana provider (Phantom, Backpack, Solflare, etc.)
+  getProvider() {
+    if (this.provider) return this.provider;
+    
+    // Try to find a Solana wallet
+    if (window.solana && window.solana.isPhantom) {
+      this.provider = window.solana;
+      console.log('✅ Phantom wallet detected');
+    } else if (window.backpack) {
+      this.provider = window.backpack;
+      console.log('✅ Backpack wallet detected');
+    } else if (window.solflare) {
+      this.provider = window.solflare;
+      console.log('✅ Solflare wallet detected');
+    }
+    
+    return this.provider;
   }
 
   // Initialize wallet connection
   async initialize() {
     try {
-      console.log('🔍 Initializing wallet service...');
+      console.log('🔍 Initializing Solana wallet service...');
       
-      const result = await this.celoService.initialize();
+      const provider = this.getProvider();
       
-      this.isConnected = result.isConnected;
-      this.address = result.address;
-      
-      if (result.error) {
-        console.log('⚠️ Wallet initialization warning:', result.error);
+      if (!provider) {
+        console.log('⚠️ No Solana wallet found');
+        return { isConnected: false, address: null };
       }
-      
-      this.notifyListeners();
-      return { isConnected: this.isConnected, address: this.address };
+
+      // Check if already connected
+      if (provider.isConnected) {
+        const publicKey = provider.publicKey;
+        this.isConnected = true;
+        this.address = publicKey.toString();
+        console.log('✅ Wallet already connected:', this.address);
+        return { isConnected: true, address: this.address };
+      }
+
+      return { isConnected: false, address: null };
     } catch (error) {
       console.error('❌ Error initializing wallet:', error);
       return { isConnected: false, address: null };
@@ -35,15 +64,22 @@ class WalletService {
   // Connect wallet
   async connectWallet() {
     try {
-      console.log('🔌 Connecting wallet...');
+      console.log('🔌 Connecting Solana wallet...');
       
-      const result = await this.celoService.connectWallet();
+      const provider = this.getProvider();
       
-      this.isConnected = result.isConnected;
-      this.address = result.address;
+      if (!provider) {
+        throw new Error('No Solana wallet found. Please install Phantom, Backpack, or Solflare.');
+      }
+
+      const response = await provider.connect();
+      this.isConnected = true;
+      this.address = response.publicKey.toString();
       
+      console.log('✅ Wallet connected:', this.address);
       this.notifyListeners();
-      return { isConnected: this.isConnected, address: this.address };
+      
+      return { isConnected: true, address: this.address };
     } catch (error) {
       console.error('❌ Wallet connection failed:', error);
       throw error;
@@ -52,13 +88,20 @@ class WalletService {
 
   // Disconnect wallet
   disconnectWallet() {
-    console.log('🔌 Disconnecting wallet...');
-    this.celoService.disconnectWallet();
-    
-    this.isConnected = false;
-    this.address = null;
-    
-    this.notifyListeners();
+    try {
+      console.log('🔌 Disconnecting wallet...');
+      
+      const provider = this.getProvider();
+      if (provider && provider.disconnect) {
+        provider.disconnect();
+      }
+      
+      this.isConnected = false;
+      this.address = null;
+      this.notifyListeners();
+    } catch (error) {
+      console.error('❌ Error disconnecting wallet:', error);
+    }
   }
 
   // Get wallet address
@@ -66,44 +109,41 @@ class WalletService {
     return this.address;
   }
 
-  // Get wallet balance
+  // Get SOL balance
   async getBalance() {
     try {
       if (!this.isConnected || !this.address) {
         return 0;
       }
 
-      const balance = await this.celoService.getBalance();
-      return balance;
+      const publicKey = new PublicKey(this.address);
+      const balanceInLamports = await this.connection.getBalance(publicKey);
+      return balanceInLamports / LAMPORTS_PER_SOL;
     } catch (error) {
-      console.error('❌ Error getting wallet balance:', error);
-      return 0;
-    }
-  }
-
-  // Get cUSD balance
-  async getCUSDBalance() {
-    try {
-      if (!this.isConnected || !this.address) {
-        return 0;
-      }
-
-      const balance = await this.celoService.getCUSDBalance();
-      return balance;
-    } catch (error) {
-      console.error('❌ Error getting cUSD balance:', error);
+      console.error('❌ Error getting balance:', error);
       return 0;
     }
   }
 
   // Send transaction
-  async sendTransaction(to, value, data = null) {
+  async sendTransaction(instruction, options = {}) {
     try {
       if (!this.isConnected) {
         throw new Error('Wallet not connected');
       }
 
-      return await this.celoService.sendTransaction(to, value, data);
+      const provider = this.getProvider();
+      if (!provider || !provider.signAndSendTransaction) {
+        throw new Error('Wallet does not support signAndSendTransaction');
+      }
+
+      const signature = await provider.signAndSendTransaction(instruction);
+      
+      // Wait for confirmation
+      await this.connection.confirmTransaction(signature, 'confirmed');
+      
+      console.log('✅ Transaction confirmed:', signature);
+      return { signature, confirmed: true };
     } catch (error) {
       console.error('❌ Transaction failed:', error);
       throw error;
@@ -117,7 +157,15 @@ class WalletService {
         throw new Error('Wallet not connected');
       }
 
-      return await this.celoService.signMessage(message);
+      const provider = this.getProvider();
+      if (!provider || !provider.signMessage) {
+        throw new Error('Wallet does not support message signing');
+      }
+
+      const encodedMessage = new TextEncoder().encode(message);
+      const signedMessage = await provider.signMessage(encodedMessage);
+      
+      return signedMessage.signature;
     } catch (error) {
       console.error('❌ Message signing failed:', error);
       throw error;
@@ -126,30 +174,49 @@ class WalletService {
 
   // Get connection status
   getConnectionStatus() {
-    const status = this.celoService.getConnectionStatus();
+    const provider = this.getProvider();
     return {
-      isConnected: status.isConnected,
-      address: status.address,
-      network: status.network,
-      chainId: status.chainId
+      isConnected: provider?.isConnected || this.isConnected,
+      address: provider?.publicKey?.toString() || this.address,
+      network: this.network,
+      chainId: 'solana-devnet'
     };
   }
 
   // Add listener for connection changes
   addListener(callback) {
     this.listeners.push(callback);
-    this.celoService.addListener((status) => {
-      this.isConnected = status.isConnected;
-      this.address = status.address;
-      this.network = status.network;
-      this.notifyListeners();
-    });
+    
+    const provider = this.getProvider();
+    if (provider) {
+      provider.on('connect', () => {
+        this.isConnected = true;
+        this.address = provider.publicKey.toString();
+        this.notifyListeners();
+      });
+
+      provider.on('disconnect', () => {
+        this.isConnected = false;
+        this.address = null;
+        this.notifyListeners();
+      });
+
+      provider.on('accountChanged', (publicKey) => {
+        if (publicKey) {
+          this.isConnected = true;
+          this.address = publicKey.toString();
+        } else {
+          this.isConnected = false;
+          this.address = null;
+        }
+        this.notifyListeners();
+      });
+    }
   }
 
   // Remove listener
   removeListener(callback) {
     this.listeners = this.listeners.filter(listener => listener !== callback);
-    this.celoService.removeListener(callback);
   }
 
   // Notify all listeners
@@ -166,10 +233,12 @@ class WalletService {
   // Check if wallet is connected
   async checkConnection() {
     try {
-      const result = await this.celoService.checkConnection();
+      const provider = this.getProvider();
       
-      this.isConnected = result.isConnected;
-      this.address = result.address;
+      if (provider && provider.isConnected) {
+        this.isConnected = true;
+        this.address = provider.publicKey.toString();
+      }
       
       return { isConnected: this.isConnected, address: this.address };
     } catch (error) {
@@ -180,30 +249,50 @@ class WalletService {
 
   // Format address for display
   formatAddress(address = this.address) {
-    return this.celoService.formatAddress(address);
+    if (!address) return '';
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
   }
 
   // Copy address to clipboard
   async copyAddressToClipboard() {
-    return await this.celoService.copyAddressToClipboard();
+    try {
+      if (!this.address) return false;
+      await navigator.clipboard.writeText(this.address);
+      return true;
+    } catch (error) {
+      console.error('❌ Error copying address:', error);
+      return false;
+    }
   }
 
   // Open address in block explorer
   openInExplorer() {
-    this.celoService.openInExplorer();
+    if (!this.address) return;
+    const explorerUrl = `https://explorer.solana.com/address/${this.address}?cluster=devnet`;
+    window.open(explorerUrl, '_blank');
   }
 
-  // Check if MetaMask is installed
-  isMetaMaskInstalled() {
-    return this.celoService.isMetaMaskInstalled();
+  // Check if Solana wallet is installed
+  isSolanaWalletInstalled() {
+    return !!(window.solana || window.backpack || window.solflare);
   }
 
   // Get network info
   async getNetworkInfo() {
-    return await this.celoService.getNetworkInfo();
+    try {
+      const version = await this.connection.getVersion();
+      return {
+        network: this.network,
+        rpcUrl: SOLANA_NETWORK,
+        version: version['solana-core']
+      };
+    } catch (error) {
+      console.error('❌ Error getting network info:', error);
+      return null;
+    }
   }
 
-  // Legacy methods for compatibility (mock implementations)
+  // Legacy mock methods for compatibility
   async getWallet() {
     const balance = await this.getBalance();
     return {
@@ -217,75 +306,16 @@ class WalletService {
     };
   }
 
-  async getTransactions(page = 1, limit = 20, type = null) {
-    // Mock transaction data for development
+  async getTransactions(page = 1, limit = 20) {
     return {
       data: {
-        transactions: [
-          {
-            id: 1,
-            type: 'deposit',
-            amount: 1.0,
-            description: 'Wallet deposit',
-            date: new Date().toISOString()
-          }
-        ]
-      }
-    };
-  }
-
-  async addToWallet(amount, reference, description) {
-    // Mock implementation - in real app this would make API call
-    const balance = await this.getBalance();
-    return {
-      data: {
-        balance: balance + amount,
-        address: this.address
-      }
-    };
-  }
-
-  async contributeToGoal(goalId, amount, description) {
-    // Mock implementation - in real app this would make API call
-    const balance = await this.getBalance();
-    return {
-      data: {
-        wallet: {
-          balance: balance - amount,
-          address: this.address
-        }
-      }
-    };
-  }
-
-  async contributeToGroup(groupId, amount, description) {
-    // Mock implementation - in real app this would make API call
-    const balance = await this.getBalance();
-    return {
-      data: {
-        wallet: {
-          balance: balance - amount,
-          address: this.address
-        }
-      }
-    };
-  }
-
-  async releaseGoalFunds(goalId) {
-    // Mock implementation - in real app this would make API call
-    const balance = await this.getBalance();
-    return {
-      data: {
-        wallet: {
-          balance: balance,
-          address: this.address
-        }
+        transactions: []
       }
     };
   }
 }
 
 // Create singleton instance
-const walletService = new WalletService();
+const walletService = new SolanaWalletService();
 
 export default walletService;

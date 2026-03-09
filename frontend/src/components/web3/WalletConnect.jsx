@@ -11,15 +11,14 @@ const WalletConnect = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState({ isConnected: false, address: null });
   const [balance, setBalance] = useState(0);
-  const [cusdBalance, setCusdBalance] = useState(0);
-  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState(false);
+  const [isSolanaWalletInstalled, setIsSolanaWalletInstalled] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if MetaMask is installed
-    const metaMaskInstalled = walletService.isMetaMaskInstalled();
-    setIsMetaMaskInstalled(metaMaskInstalled);
+    // Check if Solana wallet is installed
+    const solanaWalletInstalled = walletService.isSolanaWalletInstalled();
+    setIsSolanaWalletInstalled(solanaWalletInstalled);
 
     // Initialize wallet service
     const initializeWallet = async () => {
@@ -40,7 +39,6 @@ const WalletConnect = () => {
         loadBalances();
       } else {
         setBalance(0);
-        setCusdBalance(0);
       }
     };
 
@@ -53,10 +51,8 @@ const WalletConnect = () => {
 
   const loadBalances = async () => {
     try {
-      const celoBalance = await walletService.getBalance();
-      const cusdBal = await walletService.getCUSDBalance();
-      setBalance(celoBalance);
-      setCusdBalance(cusdBal);
+      const solBalance = await walletService.getBalance();
+      setBalance(solBalance);
     } catch (error) {
       console.error('Error loading balances:', error);
     }
@@ -109,7 +105,7 @@ const WalletConnect = () => {
     walletService.openInExplorer();
   };
 
-  if (!isMetaMaskInstalled) {
+  if (!isSolanaWalletInstalled) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -122,24 +118,34 @@ const WalletConnect = () => {
           </div>
           
           <h3 className="font-display text-h3 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4">
-            MetaMask Required
+            Solana Wallet Required
           </h3>
           
           <p className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-8">
-            Please install MetaMask to connect your Celo wallet and start earning yield.
+            Please install Phantom, Backpack, or Solflare to connect your Solana wallet and secure your savings.
           </p>
           
-          <LoopFundButton
-            variant="primary"
-            size="lg"
-            onClick={() => window.open('https://metamask.io/', '_blank')}
-            className="w-full"
-          >
-            Install MetaMask
-          </LoopFundButton>
+          <div className="flex flex-col gap-3">
+            <LoopFundButton
+              variant="primary"
+              size="lg"
+              onClick={() => window.open('https://phantom.app/', '_blank')}
+              className="w-full"
+            >
+              Install Phantom
+            </LoopFundButton>
+            <LoopFundButton
+              variant="secondary"
+              size="lg"
+              onClick={() => window.open('https://backpack.app/', '_blank')}
+              className="w-full"
+            >
+              Install Backpack
+            </LoopFundButton>
+          </div>
           
           <div className="mt-6 text-sm text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-            <p>MetaMask is required to interact with Celo blockchain</p>
+            <p>Phantom, Backpack, or Solflare required to interact with Solana</p>
           </div>
         </LoopFundCard>
       </motion.div>
@@ -192,20 +198,13 @@ const WalletConnect = () => {
             
             <div className="flex items-center justify-between">
               <span className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400">Network:</span>
-              <span className="text-loopfund-neutral-900 dark:text-loopfund-dark-text">Celo Alfajores</span>
+              <span className="text-loopfund-neutral-900 dark:text-loopfund-dark-text">Solana Devnet</span>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400">CELO Balance:</span>
+              <span className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400">SOL Balance:</span>
               <span className="text-loopfund-neutral-900 dark:text-loopfund-dark-text font-semibold">
-                {balance.toFixed(4)} CELO
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400">cUSD Balance:</span>
-              <span className="text-loopfund-neutral-900 dark:text-loopfund-dark-text font-semibold">
-                {cusdBalance.toFixed(2)} cUSD
+                {balance.toFixed(4)} SOL
               </span>
             </div>
           </div>
@@ -237,11 +236,11 @@ const WalletConnect = () => {
         </div>
         
         <h3 className="font-display text-h3 text-loopfund-neutral-900 dark:text-loopfund-dark-text mb-4">
-          Connect Your Celo Wallet
+          Connect Your Solana Wallet
         </h3>
         
         <p className="text-loopfund-neutral-600 dark:text-loopfund-neutral-400 mb-8">
-          Connect your Celo wallet to start earning yield on your mobile-first blockchain savings with AI-powered DeFi strategies.
+          Connect your Solana wallet to create secure vaults and lock in savings with time-based unlocking.
         </p>
         
         <LoopFundButton
@@ -265,7 +264,7 @@ const WalletConnect = () => {
         </LoopFundButton>
         
         <div className="mt-6 text-sm text-loopfund-neutral-500 dark:text-loopfund-neutral-400">
-          <p>Supported wallets: MetaMask, Valora, Celo Wallet</p>
+          <p>Supported wallets: Phantom, Backpack, Solflare</p>
         </div>
       </LoopFundCard>
     </motion.div>

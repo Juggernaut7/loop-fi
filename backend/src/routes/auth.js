@@ -1,100 +1,108 @@
 const express = require('express');
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const axios = require('axios');
 const { env } = require('../config/env');
-const emailService = require('../services/emailService');
 const router = express.Router();
 
-// Google OAuth Routes
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-router.get('/google/callback', 
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-  (req, res) => {
-    try {
-      const { user, token } = req.user;
-      
-      // Redirect to frontend with token
-      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/callback?token=${token}&userId=${user._id}`);
-      
-    } catch (error) {
-      console.error('Google OAuth callback error:', error);
-      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?error=oauth_failed`);
-    }
-  }
-);
-
-// Traditional Email/Password Registration
-router.post('/signup', async (req, res) => {
+// X (Twitter) OAuth Routes
+router.get('/x', (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
+    // Generate code verifier and challenge for PKCE
+    const codeVerifier = Math.random().toString(36).substring(2, 15) + 
+                        Math.random().toString(36).substring(2, 15);
+    const codeChallenge = Buffer.from(codeVerifier).toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+    
+    // Store verifier in session for callback
+    req.session.codeVerifier = codeVerifier;
+    
+    const xAuthUrl = new URL('https://twitter.com/i/oauth2/authorize');
+    xAuthUrl.searchParams.append('response_type', 'code');
+    xAuthUrl.searchParams.append('client_id', env.xClientId);
+    xAuthUrl.searchParams.append('redirect_uri', `${env.frontendUrl}/api/auth/x/callback`);
+    xAuthUrl.searchParams.append('scope', 'tweet.read users.read offline.access');
+    xAuthUrl.searchParams.append('state', Math.random().toString(36).substring(7));
+    xAuthUrl.searchParams.append('code_challenge', codeChallenge);
+    xAuthUrl.searchParams.append('code_challenge_method', 'S256');
+    
+    res.redirect(xAuthUrl.toString());
+  } catch (error) {
+    console.error('X OAuth initiation error:', error);
+    res.redirect(`${env.frontendUrl}/login?error=oauth_failed`);
+  }
+});
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists with this email' });
+router.get('/x/callback', async (req, res) => {
+  try {
+    const { code, state } = req.query;
+    
+    if (!code) {
+      throw new Error('No authorization code received');
     }
 
-    // Hash password
-    const saltRounds = 12;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
-
-    // Generate verification code
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
-    // Create new user
-    const user = new User({
-      firstName,
-      lastName,
-      email,
-      phone,
-      passwordHash,
-      isVerified: false,
-      emailVerificationCode: verificationCode,
-      emailVerificationExpires: expiresAt
+    // Exchange code for access token
+    const tokenResponse = await axios.post('https://api.twitter.com/2/oauth2/token', {
+      code,
+      client_id: env.xClientId,
+      client_secret: env.xClientSecret,
+      redirect_uri: `${env.frontendUrl}/api/auth/x/callback`,
+      grant_type: 'authorization_code',
+      code_verifier: req.session.codeVerifier
     });
 
-    await user.save();
+    const { access_token, refresh_token } = tokenResponse.data;
 
-    // Send verification email
-    try {
-      await emailService.sendVerificationCode(email, verificationCode, firstName);
-      console.log(`✅ Verification email sent to ${email}`);
-    } catch (emailError) {
-      console.error('❌ Failed to send verification email:', emailError);
-      // Don't fail the signup if email fails, just log it
-    }
+    // Get user info from X
+    const userResponse = await axios.get('https://api.twitter.com/2/users/me', {
+      headers: {
+        'Authorization': `Bearer ${access_token}`
+      }
+    });
 
-    // Generate JWT token
+    const { id, username, name } = userResponse.data.data;
+
+    // Generate JWT token for LoopFi
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { 
+        xId: id, 
+        username, 
+        name 
+      },
       env.jwtSecret,
-      { expiresIn: '7d' }
+      { expiresIn: '30d' }
     );
 
-    // Return user data (without password) and token
-    const userResponse = {
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone,
-      isVerified: user.isVerified,
-      isActive: user.isActive,
-      profilePicture: user.profilePicture,
-      notificationPreferences: user.notificationPreferences,
-      preferences: user.preferences,
-      createdAt: user.createdAt
-    };
+    // Redirect to frontend with token
+    res.redirect(`${env.frontendUrl}/auth/callback?token=${token}&user=${username}`);
 
-    res.status(201).json({
-      message: 'User created successfully. Please check your email for verification code.',
-      user: userResponse,
+  } catch (error) {
+    console.error('X OAuth callback error:', error);
+    res.redirect(`${env.frontendUrl}/login?error=oauth_failed`);
+  }
+});
+
+// Wallet-based authentication endpoint
+router.post('/wallet', async (req, res) => {
+  try {
+    const { walletAddress, signature, message } = req.body;
+
+    if (!walletAddress || !signature || !message) {
+      return res.status(400).json({ error: 'Missing wallet authentication data' });
+    }
+
+    // Generate JWT token for wallet
+    const token = jwt.sign(
+      { walletAddress },
+      env.jwtSecret,
+      { expiresIn: '30d' }
+    );
+
+    res.json({
+      message: 'Wallet authenticated successfully',
       token,
-      requiresVerification: true
+      walletAddress
     });
 
   } catch (error) {

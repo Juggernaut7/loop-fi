@@ -1,4 +1,4 @@
-// useWallet Hook - React hook for wallet connection
+// useWallet Hook - React hook for Solana wallet connection
 import { useState, useEffect, useCallback } from 'react';
 import walletService from '../services/walletService';
 
@@ -6,7 +6,6 @@ export const useWallet = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState(null);
   const [balance, setBalance] = useState(0);
-  const [cusdBalance, setCusdBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -32,13 +31,11 @@ export const useWallet = () => {
     }
   }, []);
 
-  // Load wallet balances
+  // Load wallet balance (SOL only)
   const loadBalances = useCallback(async () => {
     try {
-      const celoBalance = await walletService.getBalance();
-      const cusdBal = await walletService.getCUSDBalance();
-      setBalance(celoBalance);
-      setCusdBalance(cusdBal);
+      const solBalance = await walletService.getBalance();
+      setBalance(solBalance);
     } catch (err) {
       console.error('Error loading balances:', err);
     }
@@ -74,7 +71,6 @@ export const useWallet = () => {
     setIsConnected(false);
     setAddress(null);
     setBalance(0);
-    setCusdBalance(0);
     setError(null);
   }, []);
 
@@ -149,7 +145,6 @@ export const useWallet = () => {
         loadBalances();
       } else {
         setBalance(0);
-        setCusdBalance(0);
       }
     };
 
@@ -170,7 +165,6 @@ export const useWallet = () => {
     isConnected,
     address,
     balance,
-    cusdBalance,
     isLoading,
     error,
     
@@ -185,15 +179,14 @@ export const useWallet = () => {
     formatAddress,
     copyAddressToClipboard,
     openInExplorer,
-    isMetaMaskInstalled,
     getNetworkInfo,
     
     // Connection status
     connectionStatus: {
       isConnected,
       address,
-      network: 'celo-alfajores',
-      chainId: 44787
+      network: 'solana-devnet',
+      chainId: 'solana'
     }
   };
 };
